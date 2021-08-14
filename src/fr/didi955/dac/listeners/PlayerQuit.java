@@ -2,10 +2,10 @@ package fr.didi955.dac.listeners;
 
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
-import fr.rushcubeland.commons.Account;
-import fr.rushcubeland.rcbapi.RcbAPI;
-import fr.rushcubeland.rcbapi.rank.RankUnit;
-import fr.rushcubeland.rcbapi.tools.TitleManager;
+import fr.rushcubeland.commons.Account;;
+import fr.rushcubeland.commons.rank.RankUnit;
+import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbapi.bukkit.tools.TitleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

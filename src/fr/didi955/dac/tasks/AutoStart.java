@@ -3,16 +3,14 @@ package fr.didi955.dac.tasks;
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
-import fr.didi955.dac.game.PlayerTurn;
 import fr.rushcubeland.commons.Account;
-import fr.rushcubeland.rcbapi.RcbAPI;
-import fr.rushcubeland.rcbapi.tools.scoreboard.ScoreboardSign;
+import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
 import net.minecraft.server.v1_15_R1.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -61,7 +59,6 @@ public class AutoStart extends BukkitRunnable {
             cancel();
             Bukkit.broadcastMessage("§6La partie commence !");
             MinecraftServer.getServer().setMotd("&cPartie en cours");
-            DAC.getInstance().setMap("");
             DAC.getInstance().setGameState(GameState.INPROGRESS);
             for (Player pls : DAC.getInstance().getPlayersServerList()) {
                 pls.teleport(Locations.POOL.getLocation());
@@ -74,6 +71,7 @@ public class AutoStart extends BukkitRunnable {
                 pls.setAllowFlight(false);
                 Account account = RcbAPI.getInstance().getAccount(pls);
                 account.setCoins(account.getCoins()+10);
+                RcbAPI.getInstance().sendAccountToRedis(account);
                 DAC.getInstance().getPlayersPoints().put(pls, 0);
                 RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
             }

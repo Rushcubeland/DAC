@@ -1,8 +1,8 @@
 package fr.didi955.dac.tasks;
 
 import fr.didi955.dac.DAC;
-import fr.rushcubeland.rcbapi.network.Network;
-import fr.rushcubeland.rcbapi.network.ServerUnit;
+import fr.rushcubeland.rcbapi.bukkit.network.Network;
+import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;

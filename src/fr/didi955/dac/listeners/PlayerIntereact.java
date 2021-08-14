@@ -1,7 +1,7 @@
 package fr.didi955.dac.listeners;
 
-import fr.rushcubeland.rcbapi.network.Network;
-import fr.rushcubeland.rcbapi.network.ServerUnit;
+import fr.rushcubeland.rcbapi.bukkit.network.Network;
+import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

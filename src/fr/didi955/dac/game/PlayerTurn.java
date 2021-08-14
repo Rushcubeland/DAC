@@ -45,7 +45,7 @@ public class PlayerTurn {
         }
         else
         {
-            position =+ 1;
+            position +=1;
         }
         setPlayerTurn(DAC.getInstance().getPlayersGameList().get(position));
         makeAnnouncement();

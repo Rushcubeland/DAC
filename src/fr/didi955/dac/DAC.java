@@ -3,8 +3,8 @@ package fr.didi955.dac;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.listeners.*;
-import fr.rushcubeland.rcbapi.RcbAPI;
-import fr.rushcubeland.rcbapi.tools.scoreboard.ScoreboardSign;
+import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,15 +15,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class DAC extends JavaPlugin {
 
     private static DAC instance;
     private GameState gameState;
     private PlayerTurn playerTurn;
-    private final List<Player> playersGameList = new ArrayList<>();
-    private final List<Player> playersServerList = new ArrayList<>();
+    private final ArrayList<Player> playersGameList = new ArrayList<>();
+    private final ArrayList<Player> playersServerList = new ArrayList<>();
     private final HashMap<Block, Location> blocksLocation = new HashMap<>();
     private final HashMap<Player, Integer> playersPoints = new HashMap<>();
     private final HashMap<Player, Material> playersBlock = new HashMap<>();
@@ -51,11 +50,11 @@ public class DAC extends JavaPlugin {
         return maxPlayer;
     }
 
-    public List<Player> getPlayersGameList() {
+    public ArrayList<Player> getPlayersGameList() {
         return playersGameList;
     }
 
-    public List<Player> getPlayersServerList() {
+    public ArrayList<Player> getPlayersServerList() {
         return playersServerList;
     }
 

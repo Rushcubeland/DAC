@@ -34,20 +34,20 @@ public class PlayerMove implements Listener {
             if(DAC.getInstance().getPlayerTurn().getPlayerTurn().equals(player)){
                 Location location = player.getLocation();
                 if(location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)){
-                    Location bloc = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
-                    Block b = bloc.getBlock();
+                    Location block = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
+                    Block b = block.getBlock();
                     b.setType(DAC.getInstance().getPlayersBlock().get(player));
                     DAC.getInstance().getBlocksLocation().put(b, b.getLocation());
+                    int currentpoints = DAC.getInstance().getPlayersPoints().get(player);
+                    int pointsToGive = (100 * getMultiplierPoints(block));
+                    DAC.getInstance().getPlayersPoints().put(player, currentpoints+pointsToGive);
                     for (Player pls : DAC.getInstance().getPlayersGameList()){
-                        pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange !");
-                    }
-                    if(DAC.getInstance().getPlayersPoints().containsKey(player)){
-                        int currentpoints = DAC.getInstance().getPlayersPoints().get(player);
-                        DAC.getInstance().getPlayersPoints().put(player, currentpoints+100);
+                        pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange pour §c" + pointsToGive + " §6points !");
                     }
                     player.teleport(Locations.POOL.getLocation());
                     if(poolIsFull()){
                         DAC.getInstance().setGameState(GameState.FINISH);
+                        Bukkit.broadcastMessage("§6La piscine est remplie !");
                         return;
                     }
                     DAC.getInstance().getPlayerTurn().chooseNextPlayer();
@@ -67,5 +67,37 @@ public class PlayerMove implements Listener {
             }
         }
         return true;
+    }
+
+    public Integer getMultiplierPoints(Location loc){
+        int nb = 1;
+        int x = loc.getBlock().getX();
+        int y = loc.getBlock().getY();
+        int z = loc.getBlock().getZ()+1;
+        loc.setZ(z);
+        for(Material m : DAC.getInstance().getPlayersBlock().values()){
+            if(loc.getBlock().getType().equals(m)){
+                nb += 1;
+            }
+        }
+        loc.setZ(z-2);
+        for(Material m : DAC.getInstance().getPlayersBlock().values()){
+            if(loc.getBlock().getType().equals(m)){
+                nb += 1;
+            }
+        }
+        loc.setX(x+1);
+        for(Material m : DAC.getInstance().getPlayersBlock().values()){
+            if(loc.getBlock().getType().equals(m)){
+                nb +=1;
+            }
+        }
+        loc.setZ(x-2);
+        for(Material m : DAC.getInstance().getPlayersBlock().values()){
+            if(loc.getBlock().getType().equals(m)){
+                nb +=1;
+            }
+        }
+        return nb;
     }
 }
