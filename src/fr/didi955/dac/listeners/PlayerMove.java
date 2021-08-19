@@ -72,7 +72,6 @@ public class PlayerMove implements Listener {
     public Integer getMultiplierPoints(Location loc){
         int nb = 1;
         int x = loc.getBlock().getX();
-        int y = loc.getBlock().getY();
         int z = loc.getBlock().getZ()+1;
         loc.setZ(z);
         for(Material m : DAC.getInstance().getPlayersBlock().values()){

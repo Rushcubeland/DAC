@@ -2,7 +2,7 @@ package fr.didi955.dac.tasks;
 
 import fr.didi955.dac.DAC;
 import fr.rushcubeland.rcbapi.bukkit.network.Network;
-import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
+import fr.rushcubeland.rcbapi.bukkit.network.ServerGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -17,6 +17,10 @@ public class FinishFireworks extends BukkitRunnable {
 
     public void run() {
 
+        if(DAC.getInstance().getPlayersGameList().size() == 0){
+            end();
+            return;
+        }
         Player winner = DAC.getInstance().getPlayersGameList().get(0);
         
         if (timer == 7 || timer == 6 || timer == 5 || timer == 4 || timer == 3 || timer == 2 || timer == 1) {
@@ -30,23 +34,28 @@ public class FinishFireworks extends BukkitRunnable {
             f.setFireworkMeta(fm);
         }
         if (timer == 0) {
-            DAC.getInstance().getPlayersGameList().clear();
-            cancel();
-
-            new BukkitRunnable(){
-
-                public void run()
-                {
-                    for (Player pls : Bukkit.getOnlinePlayers()) {
-                        Network.sendPlayerToServer(pls, ServerUnit.Lobby_1);
-                    }
-
-                    Bukkit.spigot().restart();
-                }
-            }.runTaskLater(DAC.getInstance(), 300L);
+            end();
         }
 
         timer--;
     }
+
+    private void end(){
+        DAC.getInstance().getPlayersGameList().clear();
+        cancel();
+
+        new BukkitRunnable(){
+
+            public void run()
+            {
+                for (Player pls : Bukkit.getOnlinePlayers()) {
+                    Network.sendPlayerToServer(pls, Network.getBestServer(pls, ServerGroup.Lobby));
+                }
+
+                Bukkit.spigot().restart();
+            }
+        }.runTaskLater(DAC.getInstance(), 1000L);
+    }
+
 }
 

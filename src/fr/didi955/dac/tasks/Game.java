@@ -3,11 +3,16 @@ package fr.didi955.dac.tasks;
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
+import fr.didi955.dac.listeners.PlayerJoin;
 import fr.rushcubeland.commons.Account;
 import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbapi.bukkit.tools.ItemBuilder;
 import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
@@ -69,7 +74,20 @@ public class Game extends BukkitRunnable {
             }
             for(Player pls : DAC.getInstance().getPlayersServerList()){
                 pls.teleport(Locations.POOL.getLocation());
+                pls.setGameMode(GameMode.ADVENTURE);
+                winner.hidePlayer(RcbAPI.getInstance(), pls);
+                giveItems(pls);
+                pls.setAllowFlight(true);
+                pls.setFlying(true);
+
+                for(Player pls2 : DAC.getInstance().getPlayersServerList()){
+                    pls.hidePlayer(RcbAPI.getInstance(), pls2);
+                    pls2.hidePlayer(RcbAPI.getInstance(), pls);
+                }
             }
+
+
+
             FinishFireworks finishFireworks = new FinishFireworks();
             finishFireworks.runTaskTimer(DAC.getInstance(), 0L, 20L);
         }
@@ -80,5 +98,15 @@ public class Game extends BukkitRunnable {
 
     public void resetTimer(){
         timer = 2;
+    }
+
+    private void giveItems(Player player){
+        ItemStack bed = new ItemBuilder(Material.RED_BED).setName("§cRetour au Hub").removeFlags().toItemStack();
+        player.getInventory().setItem(8, bed);
+        player.updateInventory();
+
+        ItemStack star = new ItemBuilder(Material.NETHER_STAR).setName("§6Rejouer").removeFlags().toItemStack();
+        player.getInventory().setItem(4, star);
+        player.updateInventory();
     }
 }

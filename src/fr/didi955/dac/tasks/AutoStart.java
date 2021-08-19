@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -58,7 +59,8 @@ public class AutoStart extends BukkitRunnable {
         if (this.timer == 0) {
             cancel();
             Bukkit.broadcastMessage("§6La partie commence !");
-            MinecraftServer.getServer().setMotd("&cPartie en cours");
+            MinecraftServer s = (((CraftServer)Bukkit.getServer()).getHandle().getServer());
+            s.setMotd("INPROGRESS");
             DAC.getInstance().setGameState(GameState.INPROGRESS);
             for (Player pls : DAC.getInstance().getPlayersServerList()) {
                 pls.teleport(Locations.POOL.getLocation());
