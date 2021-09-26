@@ -1,6 +1,9 @@
 package fr.didi955.dac.game;
 
 import fr.didi955.dac.DAC;
+import fr.didi955.dac.spells.SpellUnit;
+import fr.didi955.dac.tasks.Afk;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -10,11 +13,12 @@ public class PlayerTurn {
 
     private Player playerTurn;
     private int position;
+    private Afk afk;
 
     public PlayerTurn() {
     }
 
-    public Player getPlayerTurn() {
+    public Player getPlayer() {
         return playerTurn;
     }
 
@@ -27,6 +31,7 @@ public class PlayerTurn {
         position = rand.nextInt(DAC.getInstance().getPlayersGameList().size());
         playerTurn = DAC.getInstance().getPlayersGameList().get(position);
         playerTurn.teleport(Locations.DIVING_PLATFORM.getLocation());
+        SpellUnit.giveItems(playerTurn);
     }
 
     public void makeAnnouncement(){
@@ -40,6 +45,10 @@ public class PlayerTurn {
     }
 
     public void chooseNextPlayer(){
+        playerTurn.getInventory().clear();
+        if(afk != null){
+            Bukkit.getScheduler().cancelTask(this.afk.getTaskId());
+        }
         if(position == DAC.getInstance().getPlayersGameList().size()-1){
             position = 0;
         }
@@ -50,6 +59,10 @@ public class PlayerTurn {
         setPlayerTurn(DAC.getInstance().getPlayersGameList().get(position));
         makeAnnouncement();
         teleportPlayer();
+        SpellUnit.giveItems(playerTurn);
+        Afk afk = new Afk(playerTurn);
+        afk.runTaskTimer(DAC.getInstance(), 0L, 20L);
+        this.afk = afk;
     }
 
     public void teleportPlayer(){

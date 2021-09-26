@@ -4,6 +4,8 @@ import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.didi955.dac.game.PlayerTurn;
+import fr.didi955.dac.spells.DestructionSpell;
+import fr.didi955.dac.spells.Spell;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +33,7 @@ public class PlayerMove implements Listener {
         }
 
         if(DAC.getInstance().isState(GameState.INPROGRESS)){
-            if(DAC.getInstance().getPlayerTurn().getPlayerTurn().equals(player)){
+            if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
                 Location location = player.getLocation();
                 if(location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)){
                     Location block = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
@@ -49,6 +51,16 @@ public class PlayerMove implements Listener {
                         DAC.getInstance().setGameState(GameState.FINISH);
                         Bukkit.broadcastMessage("§6La piscine est remplie !");
                         return;
+                    }
+                    if(DAC.getInstance().getPlayersSpell().containsKey(player)){
+                        Spell spell = DAC.getInstance().getPlayersSpell().get(player);
+                        if(spell instanceof DestructionSpell){
+                            ((DestructionSpell) spell).end();
+                        }
+                        else
+                        {
+                            spell.stop();
+                        }
                     }
                     DAC.getInstance().getPlayerTurn().chooseNextPlayer();
                 }

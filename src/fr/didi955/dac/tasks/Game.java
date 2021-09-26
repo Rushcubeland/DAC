@@ -76,6 +76,7 @@ public class Game extends BukkitRunnable {
                 pls.teleport(Locations.POOL.getLocation());
                 pls.setGameMode(GameMode.ADVENTURE);
                 winner.hidePlayer(RcbAPI.getInstance(), pls);
+                pls.getInventory().clear();
                 giveItems(pls);
                 pls.setAllowFlight(true);
                 pls.setFlying(true);
@@ -85,8 +86,6 @@ public class Game extends BukkitRunnable {
                     pls2.hidePlayer(RcbAPI.getInstance(), pls);
                 }
             }
-
-
 
             FinishFireworks finishFireworks = new FinishFireworks();
             finishFireworks.runTaskTimer(DAC.getInstance(), 0L, 20L);
@@ -100,7 +99,7 @@ public class Game extends BukkitRunnable {
         timer = 2;
     }
 
-    private void giveItems(Player player){
+    public static void giveItems(Player player){
         ItemStack bed = new ItemBuilder(Material.RED_BED).setName("§cRetour au Hub").removeFlags().toItemStack();
         player.getInventory().setItem(8, bed);
         player.updateInventory();

@@ -3,7 +3,9 @@ package fr.didi955.dac;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.listeners.*;
+import fr.didi955.dac.spells.Spell;
 import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
 import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class DAC extends JavaPlugin {
 
@@ -26,7 +29,9 @@ public class DAC extends JavaPlugin {
     private final HashMap<Block, Location> blocksLocation = new HashMap<>();
     private final HashMap<Player, Integer> playersPoints = new HashMap<>();
     private final HashMap<Player, Material> playersBlock = new HashMap<>();
-    private final int maxPlayer = 6;
+    private final HashMap<Player, Spell> playersSpell = new HashMap<>();
+    Optional<ServerUnit> optional = ServerUnit.getByPort(Bukkit.getPort());
+    private int maxPlayer;
     private String map = "Donjon de bois";
 
 
@@ -37,6 +42,7 @@ public class DAC extends JavaPlugin {
         setGameState(GameState.WAITING);
         initListeners();
         this.playerTurn = new PlayerTurn();
+        optional.ifPresent(serverUnit -> this.maxPlayer = serverUnit.getMaxPlayers());
 
     }
 
@@ -108,7 +114,6 @@ public class DAC extends JavaPlugin {
             loc.getBlock().setType(Material.WATER);
         }
         getBlocksLocation().clear();
-
     }
 
     public void setScorboardW(Player player) {
@@ -214,5 +219,9 @@ public class DAC extends JavaPlugin {
 
     public void setMap(String map) {
         this.map = map;
+    }
+
+    public HashMap<Player, Spell> getPlayersSpell() {
+        return playersSpell;
     }
 }

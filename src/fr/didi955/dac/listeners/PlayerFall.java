@@ -4,10 +4,10 @@ import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.didi955.dac.game.PlayerTurn;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import fr.didi955.dac.spells.DestructionSpell;
+import fr.didi955.dac.spells.Spell;
+import fr.didi955.dac.tasks.Game;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,9 +23,20 @@ public class PlayerFall implements Listener {
                 event.setCancelled(true);
                 Player player = (Player) event.getEntity();
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL){
-                    if(DAC.getInstance().getPlayerTurn().getPlayerTurn().equals(player)){
+                    if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
+                        if(DAC.getInstance().getPlayersSpell().containsKey(player)){
+                            Spell spell = DAC.getInstance().getPlayersSpell().get(player);
+                            if(spell instanceof DestructionSpell){
+                                ((DestructionSpell) spell).end();
+                            }
+                            else
+                            {
+                                spell.stop();
+                            }
+                        }
                         player.sendTitle("§cDommage, tu t'es loupé !", "§fTu feras mieux la prochaine fois", 10, 70, 20);
                         player.setGameMode(GameMode.SPECTATOR);
+                        player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
                         DAC.getInstance().getPlayersGameList().remove(player);
                         for (Player pls : DAC.getInstance().getPlayersGameList()){
                             pls.sendMessage("§e" + player.getDisplayName() + " §ca hurté un bloc !");
@@ -36,8 +47,9 @@ public class PlayerFall implements Listener {
                             return;
                         }
                         DAC.getInstance().getPlayerTurn().chooseNextPlayer();
+                        player.getInventory().clear();
+                        Game.giveItems(player);
                     }
-
                 }
             }
         }
