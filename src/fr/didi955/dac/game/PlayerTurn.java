@@ -46,6 +46,7 @@ public class PlayerTurn {
 
     public void chooseNextPlayer(){
         playerTurn.getInventory().clear();
+        DAC.getInstance().getPlayersSpell().remove(playerTurn);
         if(afk != null){
             Bukkit.getScheduler().cancelTask(this.afk.getTaskId());
         }

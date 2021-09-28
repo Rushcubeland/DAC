@@ -1,12 +1,13 @@
 package fr.didi955.dac.spells;
 
 import fr.rushcubeland.rcbapi.bukkit.tools.ItemBuilder;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public enum SpellUnit {
 
-    LEVITATION("Sort de lévitation", 500, LevitationSpell.class, Material.SUGAR),
+    LEVITATION("Sort de lévitation", 800, LevitationSpell.class, Material.SUGAR),
     DESTRUCTION("Sort de destruction", 500, DestructionSpell.class, Material.TNT);
 
     private final String name;
@@ -39,7 +40,7 @@ public enum SpellUnit {
 
     public static void giveItems(Player player){
         for(SpellUnit spell : SpellUnit.values()){
-            player.getInventory().addItem(new ItemBuilder(spell.getMaterial()).removeFlags().setName(spell.getName()).toItemStack());
+            player.getInventory().addItem(new ItemBuilder(spell.getMaterial()).removeFlags().setName(spell.getName() +  ": " + ChatColor.RED + spell.getPrice() + ChatColor.GOLD + " points").toItemStack());
         }
     }
 }

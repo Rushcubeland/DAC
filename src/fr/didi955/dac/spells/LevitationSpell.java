@@ -1,9 +1,7 @@
 package fr.didi955.dac.spells;
 
 import fr.didi955.dac.DAC;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -11,7 +9,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class LevitationSpell extends Spell {
 
-    private int timer = 10;
+    private int timer = 4;
 
     public LevitationSpell(Player player) {
         super(player);
@@ -19,14 +17,25 @@ public class LevitationSpell extends Spell {
 
     @Override
     public void use() {
-        super.use();
-        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 250));
-
+        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, timer*20, 250));
+        Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
+                + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
+        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1F, 1F);
     }
 
     @Override
     public void stop() {
         super.stop();
+    }
+
+    @Override
+    public String getName() {
+        return "Lévitation";
+    }
+
+    @Override
+    public int getPrice() {
+        return SpellUnit.LEVITATION.getPrice();
     }
 
     @Override

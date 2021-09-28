@@ -1,10 +1,7 @@
 package fr.didi955.dac.spells;
 
 import fr.didi955.dac.DAC;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
@@ -12,7 +9,6 @@ import org.bukkit.util.BlockIterator;
 public class DestructionSpell extends Spell {
 
     private int tid;
-    private boolean activate = false;
 
     public DestructionSpell(Player player) {
         super(player);
@@ -28,8 +24,14 @@ public class DestructionSpell extends Spell {
         super.stop();
     }
 
-    public void activate(){
-        this.activate = true;
+    @Override
+    public String getName(){
+        return "Destruction";
+    }
+
+    @Override
+    public int getPrice() {
+        return SpellUnit.DESTRUCTION.getPrice();
     }
 
     @Override
@@ -38,18 +40,21 @@ public class DestructionSpell extends Spell {
 
             if(getPlayer().getInventory().getItemInMainHand().getType().equals(SpellUnit.DESTRUCTION.getMaterial())){
                 Location location = getPlayer().getEyeLocation();
-                BlockIterator blocks = new BlockIterator(location, 0D, 50);
+                BlockIterator blocks = new BlockIterator(location, 0D, 80);
                 while(blocks.hasNext()){
                     Block block = blocks.next();
                     if(block.getType().equals(Material.AIR)){
                         getPlayer().getWorld().spawnParticle(Particle.FLAME, block.getLocation(), 1);
                     }
-                    // DOESN'T WORK
                     else if(block.getType().toString().endsWith("WOOL") && this.activate){
+                        getPlayer().getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, block.getLocation(), 1);
                         DAC.getInstance().getBlocksLocation().remove(block);
-                        blocks.next().setType(Material.AIR);
+                        block.setType(Material.WATER);
                         DestructionSpell spell = (DestructionSpell) DAC.getInstance().getPlayersSpell().get(getPlayer());
                         spell.end();
+                        Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
+                                + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
+                        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
                         break;
                     }
                 }

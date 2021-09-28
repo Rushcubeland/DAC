@@ -49,6 +49,7 @@ public class PlayerMove implements Listener {
                     player.teleport(Locations.POOL.getLocation());
                     if(poolIsFull()){
                         DAC.getInstance().setGameState(GameState.FINISH);
+                        DAC.getInstance().getPlayersGameList().removeIf(pls -> pls != DAC.getInstance().getPlayerTurn().getPlayer());
                         Bukkit.broadcastMessage("§6La piscine est remplie !");
                         return;
                     }

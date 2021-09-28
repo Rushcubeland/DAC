@@ -9,8 +9,7 @@ import fr.rushcubeland.rcbapi.bukkit.network.Network;
 import fr.rushcubeland.rcbapi.bukkit.network.ServerGroup;
 import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
 import fr.rushcubeland.rcbapi.bukkit.queue.QueueUnit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,22 +35,39 @@ public class PlayerIntereact implements Listener {
             if(event.getItem().getType().equals(Material.RED_BED)){
                 player.closeInventory();
                 Network.sendPlayerToServer(player, Network.getBestServer(player, ServerGroup.Lobby));
+                return;
             }
             if(event.getItem().getType().equals(Material.NETHER_STAR)){
                 BukkitSend.requestJoinQueue(player, QueueUnit.DE_A_COUDRE);
+                return;
             }
             if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
-                if(!DAC.getInstance().getPlayersSpell().containsKey(player)){
+                if(DAC.getInstance().getPlayersSpell().containsKey(player)){
+                    player.sendMessage(ChatColor.RED + " Vous ne pouvez pas utiliser ce sort !");
+                    return;
+                }
+                if(DAC.getInstance().getPlayersPoints().containsKey(player)){
                     if(event.getItem().getType().equals(SpellUnit.DESTRUCTION.getMaterial())){
-                        Constructor<? extends Spell> constructor = SpellUnit.DESTRUCTION.getClazz().getConstructor(Player.class);
-                        Spell spell = constructor.newInstance(player);
-                        spell.use();
+                        if(DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.DESTRUCTION.getPrice()){
+                            Constructor<? extends Spell> constructor = SpellUnit.DESTRUCTION.getClazz().getConstructor(Player.class);
+                            Spell spell = constructor.newInstance(player);
+                            spell.use();
+                            DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.DESTRUCTION.getPrice());
+                            return;
+                        }
                     }
                     if(event.getItem().getType().equals(SpellUnit.LEVITATION.getMaterial())){
-                        Constructor<? extends Spell> constructor = SpellUnit.LEVITATION.getClazz().getConstructor(Player.class);
-                        Spell spell = constructor.newInstance(player);
-                        spell.use();
+                        if(DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.LEVITATION.getPrice()){
+                            Constructor<? extends Spell> constructor = SpellUnit.LEVITATION.getClazz().getConstructor(Player.class);
+                            Spell spell = constructor.newInstance(player);
+                            spell.use();
+                            DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.LEVITATION.getPrice());
+                            return;
+                        }
                     }
+                    player.sendMessage("§cVous n'avez pas assez de points pour utiliser ce sort !");
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, SoundCategory.AMBIENT, 1F, 1F);
+                    return;
                 }
             }
         }
