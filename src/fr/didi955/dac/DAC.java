@@ -7,6 +7,7 @@ import fr.didi955.dac.spells.Spell;
 import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
 import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
 import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
+import fr.rushcubeland.rcbapi.bukkit.tools.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,13 +33,13 @@ public class DAC extends JavaPlugin {
     private final HashMap<Player, Spell> playersSpell = new HashMap<>();
     Optional<ServerUnit> optional = ServerUnit.getByPort(Bukkit.getPort());
     private int maxPlayer;
-    private String map = "Donjon de bois";
+    private String map = "DAC";
 
 
     @Override
     public void onEnable() {
         instance = this;
-        Bukkit.getServer().createWorld(new WorldCreator("DAC"));
+        Bukkit.getServer().createWorld(new WorldCreator(map));
         setGameState(GameState.WAITING);
         initListeners();
         this.playerTurn = new PlayerTurn();
@@ -48,7 +49,7 @@ public class DAC extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        clearBlocks();
+        WorldManager.replaceWorld(map, true);
         instance = null;
     }
 
@@ -107,13 +108,6 @@ public class DAC extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FoodLevel(), this);
         getServer().getPluginManager().registerEvents(new CreatureSpawn(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
-    }
-
-    private void clearBlocks(){
-        for(Location loc : getBlocksLocation().values()){
-            loc.getBlock().setType(Material.WATER);
-        }
-        getBlocksLocation().clear();
     }
 
     public void setScorboardW(Player player) {
