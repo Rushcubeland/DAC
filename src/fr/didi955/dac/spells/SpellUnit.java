@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public enum SpellUnit {
 
     LEVITATION("Sort de lévitation", 700, LevitationSpell.class, Material.SUGAR),
+    EMPRISONNEMENT("Sort d'emprisonnement", 800, EmprisonnementSpell.class , Material.BARRIER),
     DESTRUCTION("Sort de destruction", 500, DestructionSpell.class, Material.TNT);
 
     private final String name;

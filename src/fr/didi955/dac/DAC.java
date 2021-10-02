@@ -215,7 +215,7 @@ public class DAC extends JavaPlugin {
             DAC.getInstance().setGameState(GameState.FINISH);
             return;
         }
-        DAC.getInstance().getPlayerTurn().chooseNextPlayer();
+        DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
         player.getInventory().clear();
         Game.giveItems(player);
     }

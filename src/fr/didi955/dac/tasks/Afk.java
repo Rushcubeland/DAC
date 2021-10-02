@@ -43,7 +43,7 @@ public class Afk extends BukkitRunnable {
                     DAC.getInstance().setGameState(GameState.FINISH);
                     return;
                 }
-                DAC.getInstance().getPlayerTurn().chooseNextPlayer();
+                DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
             }
         }
         timer--;

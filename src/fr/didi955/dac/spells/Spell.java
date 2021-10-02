@@ -22,7 +22,7 @@ public abstract class Spell {
     }
 
     public void use(){
-        if(this instanceof LevitationSpell){
+        if(this instanceof LevitationSpell || this instanceof EmprisonnementSpell){
             activate();
         }
         DAC.getInstance().getPlayersSpell().put(player, this);
@@ -49,7 +49,9 @@ public abstract class Spell {
     public abstract int getPrice();
 
     private void cancel(){
-        getBukkitTask().cancel();
+        if(getBukkitTask() != null){
+            getBukkitTask().cancel();
+        }
     }
 
     public Player getPlayer() {

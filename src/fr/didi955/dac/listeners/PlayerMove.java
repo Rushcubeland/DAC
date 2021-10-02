@@ -65,7 +65,7 @@ public class PlayerMove implements Listener {
                             spell.stop();
                         }
                     }
-                    DAC.getInstance().getPlayerTurn().chooseNextPlayer();
+                    DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
                 }
                 else if(DAC.getInstance().getPlayersSpell().containsKey(player)){
                     if(DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){

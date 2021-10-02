@@ -65,6 +65,15 @@ public class PlayerIntereact implements Listener {
                             return;
                         }
                     }
+                    if(event.getItem().getType().equals(SpellUnit.EMPRISONNEMENT.getMaterial())){
+                        if(DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.EMPRISONNEMENT.getPrice()){
+                            Constructor<? extends Spell> constructor = SpellUnit.EMPRISONNEMENT.getClazz().getConstructor(Player.class);
+                            Spell spell = constructor.newInstance(player);
+                            spell.use();
+                            DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.EMPRISONNEMENT.getPrice());
+                            return;
+                        }
+                    }
                     player.sendMessage("§cVous n'avez pas assez de points pour utiliser ce sort !");
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, SoundCategory.AMBIENT, 1F, 1F);
                     return;
