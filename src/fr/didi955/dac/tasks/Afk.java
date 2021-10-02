@@ -20,7 +20,7 @@ public class Afk extends BukkitRunnable {
     @Override
     public void run() {
         if(!DAC.getInstance().getPlayerTurn().getPlayer().equals(player) || DAC.getInstance().isState(GameState.FINISH)){
-            cancel();
+            return;
         }
         if(timer == 15){
             player.sendMessage("§cIl te reste §e" + timer + " secondes §cpour sauter !");
@@ -45,10 +45,7 @@ public class Afk extends BukkitRunnable {
                 }
                 DAC.getInstance().getPlayerTurn().chooseNextPlayer();
             }
-
         }
-
         timer--;
-
     }
 }

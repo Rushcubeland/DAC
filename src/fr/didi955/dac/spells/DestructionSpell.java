@@ -46,7 +46,7 @@ public class DestructionSpell extends Spell {
                     if(block.getType().equals(Material.AIR)){
                         getPlayer().getWorld().spawnParticle(Particle.FLAME, block.getLocation(), 1);
                     }
-                    else if(block.getType().toString().endsWith("WOOL") && this.activate){
+                    else if(block.getType().toString().endsWith("WOOL") && this.isActivated()){
                         getPlayer().getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, block.getLocation(), 1);
                         DAC.getInstance().getBlocksLocation().remove(block);
                         block.setType(Material.WATER);
@@ -65,6 +65,5 @@ public class DestructionSpell extends Spell {
     public void end(){
         stop(tid);
     }
-
 
 }

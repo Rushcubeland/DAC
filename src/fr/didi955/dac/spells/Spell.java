@@ -11,7 +11,7 @@ public abstract class Spell {
 
     private final Player player;
     private BukkitTask bukkitTask;
-    public boolean activate = false;
+    private boolean activate = false;
 
     public Spell(Player player) {
         this.player = player;
@@ -29,7 +29,12 @@ public abstract class Spell {
         run();
     }
 
+    public boolean isActivated(){
+        return this.activate;
+    }
+
     public void stop(){
+        DAC.getInstance().getPlayersSpell().remove(player);
         cancel();
     }
 

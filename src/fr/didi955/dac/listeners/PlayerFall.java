@@ -5,6 +5,7 @@ import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.spells.DestructionSpell;
+import fr.didi955.dac.spells.LevitationSpell;
 import fr.didi955.dac.spells.Spell;
 import fr.didi955.dac.tasks.Game;
 import org.bukkit.*;
@@ -33,22 +34,11 @@ public class PlayerFall implements Listener {
                             {
                                 spell.stop();
                             }
+                            if(spell instanceof LevitationSpell){
+                                return;
+                            }
                         }
-                        player.sendTitle("§cDommage, tu t'es loupé !", "§fTu feras mieux la prochaine fois", 10, 70, 20);
-                        player.setGameMode(GameMode.SPECTATOR);
-                        player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
-                        DAC.getInstance().getPlayersGameList().remove(player);
-                        for (Player pls : DAC.getInstance().getPlayersGameList()){
-                            pls.sendMessage("§e" + player.getDisplayName() + " §ca hurté un bloc !");
-                        }
-                        player.teleport(Locations.POOL.getLocation());
-                        if(DAC.getInstance().getPlayersGameList().size() == 1) {
-                            DAC.getInstance().setGameState(GameState.FINISH);
-                            return;
-                        }
-                        DAC.getInstance().getPlayerTurn().chooseNextPlayer();
-                        player.getInventory().clear();
-                        Game.giveItems(player);
+                        DAC.getInstance().deathMethod(player);
                     }
                 }
             }

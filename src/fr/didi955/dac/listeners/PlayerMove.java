@@ -5,12 +5,14 @@ import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.spells.DestructionSpell;
+import fr.didi955.dac.spells.LevitationSpell;
 import fr.didi955.dac.spells.Spell;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -65,6 +67,16 @@ public class PlayerMove implements Listener {
                     }
                     DAC.getInstance().getPlayerTurn().chooseNextPlayer();
                 }
+                else if(DAC.getInstance().getPlayersSpell().containsKey(player)){
+                    if(DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){
+                        Block b = location.getBlock().getRelative(BlockFace.DOWN);
+                        if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < 50 && !b.getType().equals(Material.AIR)){
+                            LevitationSpell spell = (LevitationSpell) DAC.getInstance().getPlayersSpell().get(player);
+                            spell.stop();
+                            DAC.getInstance().deathMethod(player);
+                        }
+                    }
+                }
             }
         }
     }
@@ -85,8 +97,8 @@ public class PlayerMove implements Listener {
     public Integer getMultiplierPoints(Location loc){
         int nb = 1;
         int x = loc.getBlock().getX();
-        int z = loc.getBlock().getZ()+1;
-        loc.setZ(z);
+        int z = loc.getBlock().getZ();
+        loc.setZ(z+1);
         for(Material m : DAC.getInstance().getPlayersBlock().values()){
             if(loc.getBlock().getType().equals(m)){
                 nb += 1;
@@ -99,12 +111,13 @@ public class PlayerMove implements Listener {
             }
         }
         loc.setX(x+1);
+        loc.setZ(z);
         for(Material m : DAC.getInstance().getPlayersBlock().values()){
             if(loc.getBlock().getType().equals(m)){
                 nb +=1;
             }
         }
-        loc.setZ(x-2);
+        loc.setX(x-2);
         for(Material m : DAC.getInstance().getPlayersBlock().values()){
             if(loc.getBlock().getType().equals(m)){
                 nb +=1;

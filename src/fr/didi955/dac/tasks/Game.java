@@ -71,8 +71,6 @@ public class Game extends BukkitRunnable {
                         pls.sendMessage("§e-------------------------");
                     }
                 }
-            }
-            for(Player pls : DAC.getInstance().getPlayersServerList()){
                 pls.teleport(Locations.POOL.getLocation());
                 pls.setGameMode(GameMode.ADVENTURE);
                 winner.hidePlayer(RcbAPI.getInstance(), pls);
@@ -82,17 +80,16 @@ public class Game extends BukkitRunnable {
                 pls.setFlying(true);
 
                 for(Player pls2 : DAC.getInstance().getPlayersServerList()){
-                    pls.hidePlayer(RcbAPI.getInstance(), pls2);
-                    pls2.hidePlayer(RcbAPI.getInstance(), pls);
+                    if(!pls.equals(winner)){
+                        pls.hidePlayer(RcbAPI.getInstance(), pls2);
+                        pls2.hidePlayer(RcbAPI.getInstance(), pls);
+                    }
                 }
             }
-
             FinishFireworks finishFireworks = new FinishFireworks();
             finishFireworks.runTaskTimer(DAC.getInstance(), 0L, 20L);
         }
-
         this.timer--;
-
     }
 
     public void resetTimer(){

@@ -31,7 +31,7 @@ public class PlayerQuit implements Listener {
             DAC.getInstance().getPlayersServerList().remove(player);
 
             if (DAC.getInstance().isState(GameState.INPROGRESS)) {
-                event.setQuitMessage("§e" + player.getName() + "§cest mort en se déconnectant !");
+                event.setQuitMessage("§e" + player.getName() + " §cest mort en se déconnectant !");
                 for(Player pls : Bukkit.getOnlinePlayers()) {
                     TitleManager.sendActionBar(pls, "§6Il ne reste plus que " + DAC.getInstance().getPlayersGameList().size() + " §6joueurs");
                 }

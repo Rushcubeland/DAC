@@ -17,6 +17,7 @@ public class LevitationSpell extends Spell {
 
     @Override
     public void use() {
+        super.use();
         getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, timer*20, 250));
         Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
                 + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
