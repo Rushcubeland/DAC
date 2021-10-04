@@ -22,7 +22,7 @@ public abstract class Spell {
     }
 
     public void use(){
-        if(this instanceof LevitationSpell || this instanceof EmprisonnementSpell){
+        if(this instanceof LevitationSpell || this instanceof EmprisonnementSpell || this instanceof DistorsionSpell){
             activate();
         }
         DAC.getInstance().getPlayersSpell().put(player, this);
