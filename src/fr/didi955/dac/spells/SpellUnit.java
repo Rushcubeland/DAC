@@ -9,7 +9,7 @@ public enum SpellUnit {
 
     LEVITATION("Sort de lévitation", 700, LevitationSpell.class, Material.SUGAR),
     EMPRISONNEMENT("Sort d'emprisonnement", 800, EmprisonnementSpell.class , Material.BARRIER),
-    DISTORSION("Sort de distorsion", 900, DistorsionSpell.class, Material.ENDER_PEARL),
+    DISTORSION("Sort de distorsion", 1000, DistorsionSpell.class, Material.ENDER_PEARL),
     DESTRUCTION("Sort de destruction", 500, DestructionSpell.class, Material.TNT);
 
     private final String name;

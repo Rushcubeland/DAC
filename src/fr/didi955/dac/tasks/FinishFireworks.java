@@ -54,7 +54,7 @@ public class FinishFireworks extends BukkitRunnable {
 
                 Bukkit.spigot().restart();
             }
-        }.runTaskLater(DAC.getInstance(), 1000L);
+        }.runTaskLater(DAC.getInstance(), 800L);
     }
 
 }

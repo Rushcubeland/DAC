@@ -42,6 +42,7 @@ public class PlayerIntereact implements Listener {
                 return;
             }
             if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
+                event.setCancelled(true);
                 if(DAC.getInstance().getPlayersSpell().containsKey(player)){
                     player.sendMessage(ChatColor.RED + " Vous ne pouvez pas utiliser ce sort !");
                     return;
@@ -71,6 +72,15 @@ public class PlayerIntereact implements Listener {
                             Spell spell = constructor.newInstance(player);
                             spell.use();
                             DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.EMPRISONNEMENT.getPrice());
+                            return;
+                        }
+                    }
+                    if(event.getItem().getType().equals(SpellUnit.DISTORSION.getMaterial())){
+                        if(DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.DISTORSION.getPrice()){
+                            Constructor<? extends Spell> constructor = SpellUnit.DISTORSION.getClazz().getConstructor(Player.class);
+                            Spell spell = constructor.newInstance(player);
+                            spell.use();
+                            DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.DISTORSION.getPrice());
                             return;
                         }
                     }

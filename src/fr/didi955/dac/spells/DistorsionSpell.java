@@ -1,14 +1,23 @@
 package fr.didi955.dac.spells;
 
+import fr.didi955.dac.DAC;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 public class DistorsionSpell extends Spell {
 
-    private final int timer = 5;
-
+    public DistorsionSpell(Player player) {
+        super(player);
+    }
 
     @Override
     public void use(){
         super.use();
-        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, timer*20, 250));
+        DAC.getInstance().getPlayerTurn().setNextspell(SpellUnit.DISTORSION);
         Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
                 + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1F, 1F);

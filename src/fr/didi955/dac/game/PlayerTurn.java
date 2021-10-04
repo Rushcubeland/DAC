@@ -6,6 +6,8 @@ import fr.didi955.dac.tasks.Afk;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
@@ -15,6 +17,7 @@ public class PlayerTurn {
     private int position;
     private Afk afk;
     private int nextPositionRequired = 1;
+    private SpellUnit nextspell;
 
     public PlayerTurn() {
     }
@@ -81,6 +84,10 @@ public class PlayerTurn {
         teleportPlayer();
         setNextPositionRequired(1);
         SpellUnit.giveItems(playerTurn);
+        if(this.nextspell == SpellUnit.DISTORSION){
+            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 500, 3));
+            setNextspell(null);
+        }
         Afk afk = new Afk(playerTurn);
         afk.runTaskTimer(DAC.getInstance(), 0L, 20L);
         this.afk = afk;
@@ -95,5 +102,13 @@ public class PlayerTurn {
             return "Choix en cours";
         }
         return this.playerTurn.getDisplayName();
+    }
+
+    public SpellUnit getNextspell() {
+        return nextspell;
+    }
+
+    public void setNextspell(SpellUnit nextspell) {
+        this.nextspell = nextspell;
     }
 }
