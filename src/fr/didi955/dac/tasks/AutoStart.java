@@ -3,6 +3,7 @@ package fr.didi955.dac.tasks;
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
+import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.commons.Account;
 import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
 import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
@@ -74,11 +75,11 @@ public class AutoStart extends BukkitRunnable {
                 Account account = RcbAPI.getInstance().getAccount(pls);
                 account.setCoins(account.getCoins()+10);
                 RcbAPI.getInstance().sendAccountToRedis(account);
+                AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(pls);
+                aStatsDAC.setNbParties(aStatsDAC.getNbParties()+1);
+                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
                 DAC.getInstance().getPlayersPoints().put(pls, 0);
                 RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
-            }
-            DAC.getInstance().getPlayerTurn().chooseFirstPlayer();
-            for(Player pls : DAC.getInstance().getPlayersGameList()){
                 if(DAC.getInstance().getPlayersBlock().containsKey(pls)){
                     continue;
                 }
@@ -91,6 +92,7 @@ public class AutoStart extends BukkitRunnable {
                     }
                 }
             }
+            DAC.getInstance().getPlayerTurn().chooseFirstPlayer();
             Game game = new Game();
             game.runTaskTimer(DAC.getInstance(), 0L, 20L);
 

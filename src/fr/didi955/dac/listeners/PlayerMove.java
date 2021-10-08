@@ -7,6 +7,8 @@ import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.spells.DestructionSpell;
 import fr.didi955.dac.spells.LevitationSpell;
 import fr.didi955.dac.spells.Spell;
+import fr.rushcubeland.commons.AStatsDAC;
+import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,6 +51,10 @@ public class PlayerMove implements Listener {
                         pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange pour §c" + pointsToGive + " §6points !");
                     }
                     player.teleport(Locations.POOL.getLocation());
+                    AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(player);
+                    aStatsDAC.setNbSuccessJumps(aStatsDAC.getNbSuccessJumps()+1);
+                    aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
+                    RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
                     if(poolIsFull()){
                         DAC.getInstance().setGameState(GameState.FINISH);
                         DAC.getInstance().getPlayersGameList().removeIf(pls -> pls != DAC.getInstance().getPlayerTurn().getPlayer());

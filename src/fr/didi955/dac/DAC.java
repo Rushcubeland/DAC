@@ -6,6 +6,7 @@ import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.listeners.*;
 import fr.didi955.dac.spells.Spell;
 import fr.didi955.dac.tasks.Game;
+import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
 import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
 import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
@@ -43,7 +44,6 @@ public class DAC extends JavaPlugin {
         initListeners();
         this.playerTurn = new PlayerTurn();
         optional.ifPresent(serverUnit -> this.maxPlayer = serverUnit.getMaxPlayers());
-
     }
 
     @Override
@@ -203,6 +203,11 @@ public class DAC extends JavaPlugin {
     }
 
     public void deathMethod(Player player){
+        AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(player);
+        aStatsDAC.setLoses(aStatsDAC.getLoses()+1);
+        aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
+        aStatsDAC.setNbFailJumps(aStatsDAC.getNbFailJumps()+1);
+        RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
         player.sendTitle("§cDommage, tu t'es loupé !", "§fTu feras mieux la prochaine fois", 10, 70, 20);
         player.setGameMode(GameMode.SPECTATOR);
         player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
