@@ -4,6 +4,7 @@ import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.didi955.dac.listeners.PlayerJoin;
+import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.commons.Account;
 import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
 import fr.rushcubeland.rcbapi.bukkit.tools.ItemBuilder;
@@ -44,19 +45,24 @@ public class Game extends BukkitRunnable {
         if(DAC.getInstance().isState(GameState.FINISH)){
             cancel();
             Player winner = DAC.getInstance().getPlayersGameList().get(0);
-            Account account = RcbAPI.getInstance().getAccount(winner);
-            account.setCoins(account.getCoins()+100);
-            RcbAPI.getInstance().sendAccountToRedis(account);
-            Bukkit.broadcastMessage(account.getRank().getPrefix() + winner.getDisplayName() + " §aa gagné la partie !");
-            winner.sendTitle("§6Félicitations !", "§fVous avez gagné", 10, 70, 20);
-            winner.sendMessage(" ");
-            winner.sendMessage("§e-------------------------");
-            winner.sendMessage("§6Récompenses:");
-            winner.sendMessage("§c ");
-            winner.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(winner));
-            winner.sendMessage("§eVictoire: §c100 Coins");
-            winner.sendMessage("§eParticipation: §c10 Coins");
-            winner.sendMessage("§e-------------------------");
+            if (winner != null) {
+                Account account = RcbAPI.getInstance().getAccount(winner);
+                AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(winner);
+                account.setCoins(account.getCoins() + 100);
+                aStatsDAC.setWins(aStatsDAC.getWins() + 1);
+                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                RcbAPI.getInstance().sendAccountToRedis(account);
+                Bukkit.broadcastMessage(account.getRank().getPrefix() + winner.getDisplayName() + " §aa gagné la partie !");
+                winner.sendTitle("§6Félicitations !", "§fVous avez gagné", 10, 70, 20);
+                winner.sendMessage(" ");
+                winner.sendMessage("§e-------------------------");
+                winner.sendMessage("§6Récompenses:");
+                winner.sendMessage("§c ");
+                winner.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(winner));
+                winner.sendMessage("§eVictoire: §c100 Coins");
+                winner.sendMessage("§eParticipation: §c10 Coins");
+                winner.sendMessage("§e-------------------------");
+            }
             for(Player pls : DAC.getInstance().getPlayersServerList()){
                 RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
                 RcbAPI.getInstance().getTablist().setTabListPlayer(pls);
@@ -69,22 +75,17 @@ public class Game extends BukkitRunnable {
                         pls.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(pls));
                         pls.sendMessage("§eParticipation: §c10 Coins");
                         pls.sendMessage("§e-------------------------");
+                        if (winner != null) {
+                            winner.hidePlayer(RcbAPI.getInstance(), pls);
+                        }
                     }
                 }
                 pls.teleport(Locations.POOL.getLocation());
                 pls.setGameMode(GameMode.ADVENTURE);
-                winner.hidePlayer(RcbAPI.getInstance(), pls);
                 pls.getInventory().clear();
                 giveItems(pls);
                 pls.setAllowFlight(true);
                 pls.setFlying(true);
-
-                for(Player pls2 : DAC.getInstance().getPlayersServerList()){
-                    if(!pls.equals(winner)){
-                        pls.hidePlayer(RcbAPI.getInstance(), pls2);
-                        pls2.hidePlayer(RcbAPI.getInstance(), pls);
-                    }
-                }
             }
             FinishFireworks finishFireworks = new FinishFireworks();
             finishFireworks.runTaskTimer(DAC.getInstance(), 0L, 20L);

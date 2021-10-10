@@ -111,16 +111,17 @@ public class DAC extends JavaPlugin {
 
     public void setScorboardW(Player player) {
         if(RcbAPI.getInstance().boards.containsKey(player)){
-            RcbAPI.getInstance().boards.get(player).setLine(1, "§b");
-            RcbAPI.getInstance().boards.get(player).setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
-            RcbAPI.getInstance().boards.get(player).setLine(3, "§l  ");
-            RcbAPI.getInstance().boards.get(player).setLine(4, "§6Map: §c" + map);
-            RcbAPI.getInstance().boards.get(player).setLine(5, "§a ");
-            RcbAPI.getInstance().boards.get(player).setLine(6, "§cEn attente de joueurs");
-            RcbAPI.getInstance().boards.get(player).setLine(7, "§l");
-            RcbAPI.getInstance().boards.get(player).setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
-            RcbAPI.getInstance().boards.get(player).setLine(9, "§4      ");
-            RcbAPI.getInstance().boards.get(player).setLine(10, "§eplay.rushcubeland.fr");
+            ScoreboardSign sc = RcbAPI.getInstance().boards.get(player);
+            sc.setLine(1, "§b");
+            sc.setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
+            sc.setLine(3, "§l  ");
+            sc.setLine(4, "§6Map: §c" + map);
+            sc.setLine(5, "§a ");
+            sc.setLine(6, "§cEn attente de joueurs");
+            sc.setLine(7, "§l");
+            sc.setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
+            sc.setLine(9, "§4      ");
+            sc.setLine(10, "§eplay.rushcubeland.fr");
         }
         else
         {
@@ -142,16 +143,17 @@ public class DAC extends JavaPlugin {
 
     public void setScorboardS(Player player) {
         if(RcbAPI.getInstance().boards.containsKey(player)){
-            RcbAPI.getInstance().boards.get(player).setLine(1, "§b");
-            RcbAPI.getInstance().boards.get(player).setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
-            RcbAPI.getInstance().boards.get(player).setLine(3, "§l  ");
-            RcbAPI.getInstance().boards.get(player).setLine(4, "§6Map: §c" + map);
-            RcbAPI.getInstance().boards.get(player).setLine(5, "§a ");
-            RcbAPI.getInstance().boards.get(player).setLine(6, "§6Lancement dans: §e");
-            RcbAPI.getInstance().boards.get(player).setLine(7, "§l");
-            RcbAPI.getInstance().boards.get(player).setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
-            RcbAPI.getInstance().boards.get(player).setLine(9, "§4      ");
-            RcbAPI.getInstance().boards.get(player).setLine(10, "§eplay.rushcubeland.fr");
+            ScoreboardSign sc = RcbAPI.getInstance().boards.get(player);
+            sc.setLine(1, "§b");
+            sc.setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
+            sc.setLine(3, "§l  ");
+            sc.setLine(4, "§6Map: §c" + map);
+            sc.setLine(5, "§a ");
+            sc.setLine(6, "§6Lancement dans: §e");
+            sc.setLine(7, "§l");
+            sc.setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
+            sc.setLine(9, "§4      ");
+            sc.setLine(10, "§eplay.rushcubeland.fr");
         }
         else
         {
@@ -173,16 +175,17 @@ public class DAC extends JavaPlugin {
 
     public void setScorboardIP(Player player) {
         if(RcbAPI.getInstance().boards.containsKey(player)){
-            RcbAPI.getInstance().boards.get(player).setLine(1, "§b");
-            RcbAPI.getInstance().boards.get(player).setLine(2, "§6Map: §e" + map);
-            RcbAPI.getInstance().boards.get(player).setLine(3, "§1 ");
-            RcbAPI.getInstance().boards.get(player).setLine(4, "§6Tour: §e");
-            RcbAPI.getInstance().boards.get(player).setLine(5, "§a ");
-            RcbAPI.getInstance().boards.get(player).setLine(6, "§cPoints: §60");
-            RcbAPI.getInstance().boards.get(player).setLine(7, "§l");
-            RcbAPI.getInstance().boards.get(player).setLine(8, "§6Joueurs restant: §c" + getPlayersGameList().size());
-            RcbAPI.getInstance().boards.get(player).setLine(9, "§4      ");
-            RcbAPI.getInstance().boards.get(player).setLine(10, "§eplay.rushcubeland.fr");
+            ScoreboardSign sc = RcbAPI.getInstance().boards.get(player);
+            sc.setLine(1, "§b");
+            sc.setLine(2, "§6Map: §e" + map);
+            sc.setLine(3, "§1 ");
+            sc.setLine(4, "§6Tour: §e");
+            sc.setLine(5, "§a ");
+            sc.setLine(6, "§cPoints: §60");
+            sc.setLine(7, "§l");
+            sc.setLine(8, "§6Joueurs restant: §c" + getPlayersGameList().size());
+            sc.setLine(9, "§4      ");
+            sc.setLine(10, "§eplay.rushcubeland.fr");
         }
         else
         {

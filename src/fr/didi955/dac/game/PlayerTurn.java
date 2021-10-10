@@ -57,6 +57,9 @@ public class PlayerTurn {
 
     public void initNextPlayer(int i){
         playerTurn.getInventory().clear();
+        for (PotionEffect effect : playerTurn.getActivePotionEffects()) {
+            playerTurn.removePotionEffect(effect.getType());
+        }
         if(afk != null){
             Bukkit.getScheduler().cancelTask(this.afk.getTaskId());
         }
@@ -85,7 +88,7 @@ public class PlayerTurn {
         setNextPositionRequired(1);
         SpellUnit.giveItems(playerTurn);
         if(this.nextspell == SpellUnit.DISTORSION){
-            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 500, 3));
+            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 2000, 3));
             setNextspell(null);
         }
         Afk afk = new Afk(playerTurn);
