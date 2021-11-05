@@ -76,12 +76,13 @@ public class Game extends BukkitRunnable {
                         pls.sendMessage("§eParticipation: §c10 Coins");
                         pls.sendMessage("§e-------------------------");
                         if (winner != null) {
+                            pls.showPlayer(RcbAPI.getInstance(), winner);
                             winner.hidePlayer(RcbAPI.getInstance(), pls);
+                            pls.setGameMode(GameMode.SPECTATOR);
                         }
                     }
                 }
                 pls.teleport(Locations.POOL.getLocation());
-                pls.setGameMode(GameMode.ADVENTURE);
                 pls.getInventory().clear();
                 giveItems(pls);
                 pls.setAllowFlight(true);

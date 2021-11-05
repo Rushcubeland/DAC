@@ -39,7 +39,8 @@ public class PlayerMove implements Listener {
         if(DAC.getInstance().isState(GameState.INPROGRESS)){
             if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
                 Location location = player.getLocation();
-                if(location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)){
+                if((location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)) ||
+                        (location.getBlock().getRelative(BlockFace.DOWN).isLiquid() && location.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER))){
                     Location block = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
                     Block b = block.getBlock();
                     b.setType(DAC.getInstance().getPlayersBlock().get(player));
