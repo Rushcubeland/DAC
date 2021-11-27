@@ -1,13 +1,15 @@
 package fr.didi955.dac.game;
 
+import fr.rushcubeland.rcbapi.bukkit.map.MapUnit;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 public enum Locations {
 
-    LOBBY(new Location(Bukkit.getWorld("Lobby"), 82D, 55D, -74D)),
-    POOL(new Location(Bukkit.getWorld("DAC"), -161D, 59D, -636.5D)),
-    DIVING_PLATFORM(new Location(Bukkit.getWorld("DAC"), -162.4D, 55D, -638.5D));
+    LOBBY(new Location(Bukkit.getWorld(MapUnit.WAITING_LOBBY.getPath()), 82D, 55D, -74D)),
+    POOL(new Location(Bukkit.getWorld(MapUnit.DAC.getPath()), -161D, 59D, -636.5D)),
+    DIVING_PLATFORM(new Location(Bukkit.getWorld(MapUnit.DAC.getPath()), -162.4D, 55D, -638.5D));
 
     private final Location location;
 
@@ -18,4 +20,5 @@ public enum Locations {
     public Location getLocation() {
         return location;
     }
+
 }

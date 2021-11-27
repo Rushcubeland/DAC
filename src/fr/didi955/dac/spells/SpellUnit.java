@@ -42,7 +42,7 @@ public enum SpellUnit {
 
     public static void giveItems(Player player){
         for(SpellUnit spell : SpellUnit.values()){
-            player.getInventory().addItem(new ItemBuilder(spell.getMaterial()).removeFlags().setName(spell.getName() +  ": " + ChatColor.RED + spell.getPrice() + ChatColor.GOLD + " points").toItemStack());
+            player.getInventory().addItem(new ItemBuilder(spell.getMaterial()).removeFlags().setName(ChatColor.WHITE + spell.getName() +  ": " + ChatColor.RED + spell.getPrice() + ChatColor.GOLD + " points").toItemStack());
         }
     }
 }

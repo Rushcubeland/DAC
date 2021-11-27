@@ -28,8 +28,6 @@ public class AutoStart extends BukkitRunnable {
             sign.getValue().setLine(8, "§7<" + DAC.getInstance().getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
         }
 
-
-
         for (Player pls : DAC.getInstance().getPlayersGameList()) {
             pls.setLevel(this.timer);
         }
@@ -54,8 +52,6 @@ public class AutoStart extends BukkitRunnable {
             int minpls = configminpls - plsc;
             Bukkit.broadcastMessage("§cIl manque §6" + minpls + " §cjoueurs pour commencer la partie");
         }
-
-
 
         if (this.timer == 0) {
             cancel();

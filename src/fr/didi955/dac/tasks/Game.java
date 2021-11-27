@@ -78,7 +78,9 @@ public class Game extends BukkitRunnable {
                         if (winner != null) {
                             pls.showPlayer(RcbAPI.getInstance(), winner);
                             winner.hidePlayer(RcbAPI.getInstance(), pls);
-                            pls.setGameMode(GameMode.SPECTATOR);
+                            pls.setGameMode(GameMode.ADVENTURE);
+                            pls.setAllowFlight(true);
+                            pls.setFlying(true);
                         }
                     }
                 }
