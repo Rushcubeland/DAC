@@ -6,8 +6,8 @@ import fr.didi955.dac.game.Locations;
 import fr.didi955.dac.tasks.AutoStart;
 import fr.rushcubeland.commons.Account;
 import fr.rushcubeland.commons.rank.RankUnit;
-import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
-import fr.rushcubeland.rcbapi.bukkit.tools.ItemBuilder;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
+import fr.rushcubeland.rcbcore.bukkit.tools.ItemBuilder;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -17,6 +17,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public class PlayerJoin implements Listener {
 

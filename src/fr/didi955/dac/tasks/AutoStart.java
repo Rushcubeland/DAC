@@ -5,8 +5,8 @@ import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.commons.Account;
-import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
-import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
+import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
 import net.minecraft.server.v1_15_R1.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -17,6 +17,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public class AutoStart extends BukkitRunnable {
 

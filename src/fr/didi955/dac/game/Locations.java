@@ -1,9 +1,16 @@
 package fr.didi955.dac.game;
 
-import fr.rushcubeland.rcbapi.bukkit.map.MapUnit;
+import fr.rushcubeland.rcbcore.bukkit.map.MapUnit;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public enum Locations {
 

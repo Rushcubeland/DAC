@@ -2,12 +2,18 @@ package fr.didi955.dac.spells;
 
 import fr.didi955.dac.DAC;
 import fr.rushcubeland.commons.AStatsDAC;
-import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public abstract class Spell {
 

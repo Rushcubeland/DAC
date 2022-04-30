@@ -1,8 +1,8 @@
 package fr.didi955.dac.tasks;
 
 import fr.didi955.dac.DAC;
-import fr.rushcubeland.rcbapi.bukkit.network.Network;
-import fr.rushcubeland.rcbapi.bukkit.network.ServerGroup;
+import fr.rushcubeland.rcbcore.bukkit.network.Network;
+import fr.rushcubeland.rcbcore.bukkit.network.ServerGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -10,6 +10,14 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public class FinishFireworks extends BukkitRunnable {
 

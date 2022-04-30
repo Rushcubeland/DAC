@@ -1,9 +1,17 @@
 package fr.didi955.dac.spells;
 
-import fr.rushcubeland.rcbapi.bukkit.tools.ItemBuilder;
+import fr.rushcubeland.rcbcore.bukkit.tools.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public enum SpellUnit {
 

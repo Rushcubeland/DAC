@@ -7,12 +7,12 @@ import fr.didi955.dac.listeners.*;
 import fr.didi955.dac.spells.Spell;
 import fr.didi955.dac.tasks.Game;
 import fr.rushcubeland.commons.AStatsDAC;
-import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
-import fr.rushcubeland.rcbapi.bukkit.map.MapGroup;
-import fr.rushcubeland.rcbapi.bukkit.map.MapUnit;
-import fr.rushcubeland.rcbapi.bukkit.network.ServerUnit;
-import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
-import fr.rushcubeland.rcbapi.bukkit.tools.WorldManager;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
+import fr.rushcubeland.rcbcore.bukkit.map.MapGroup;
+import fr.rushcubeland.rcbcore.bukkit.map.MapUnit;
+import fr.rushcubeland.rcbcore.bukkit.network.ServerUnit;
+import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
+import fr.rushcubeland.rcbcore.bukkit.tools.WorldManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -22,6 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public class DAC extends JavaPlugin {
 

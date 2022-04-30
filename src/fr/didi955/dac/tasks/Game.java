@@ -3,12 +3,11 @@ package fr.didi955.dac.tasks;
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
-import fr.didi955.dac.listeners.PlayerJoin;
 import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.commons.Account;
-import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
-import fr.rushcubeland.rcbapi.bukkit.tools.ItemBuilder;
-import fr.rushcubeland.rcbapi.bukkit.tools.ScoreboardSign;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
+import fr.rushcubeland.rcbcore.bukkit.tools.ItemBuilder;
+import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -17,6 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public class Game extends BukkitRunnable {
 

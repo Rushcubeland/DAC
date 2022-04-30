@@ -3,12 +3,11 @@ package fr.didi955.dac.listeners;
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
-import fr.didi955.dac.game.PlayerTurn;
 import fr.didi955.dac.spells.DestructionSpell;
 import fr.didi955.dac.spells.LevitationSpell;
 import fr.didi955.dac.spells.Spell;
 import fr.rushcubeland.commons.AStatsDAC;
-import fr.rushcubeland.rcbapi.bukkit.RcbAPI;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +20,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Random;
+
+/**
+ * This class file is a part of DAC project claimed by Rushcubeland project.
+ * You cannot redistribute, modify or use it for personnal or commercial purposes
+ * please contact admin@rushcubeland.fr for any requests or information about that.
+ *
+ * @author LANNUZEL Dylan
+ */
 
 public class PlayerMove implements Listener {
 
