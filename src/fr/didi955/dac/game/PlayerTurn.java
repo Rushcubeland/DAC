@@ -27,9 +27,6 @@ public class PlayerTurn {
     private int nextPositionRequired = 1;
     private SpellUnit nextspell;
 
-    public PlayerTurn() {
-    }
-
     public Player getPlayer() {
         return playerTurn;
     }

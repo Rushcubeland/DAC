@@ -26,14 +26,14 @@ public class FrameIntegrity implements Listener {
     }
 
     @EventHandler
-    public void UseFrame(PlayerInteractEntityEvent e) {
+    public void useFrame(PlayerInteractEntityEvent e) {
         if (e.getRightClicked() instanceof ItemFrame || e.getRightClicked() instanceof MapView) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void FrameEntity(EntityDamageByEntityEvent e) {
+    public void frameEntity(EntityDamageByEntityEvent e) {
         if ((e.getEntity() instanceof ItemFrame || e.getEntity() instanceof MapView) &&
                 e.getDamager() instanceof Player) {
             e.setCancelled(true);

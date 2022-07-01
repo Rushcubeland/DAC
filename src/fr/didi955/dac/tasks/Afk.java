@@ -36,23 +36,21 @@ public class Afk extends BukkitRunnable {
         if(timer == 5){
             player.sendMessage("§c" + timer + " secondes pour sauter !");
         }
-        if(timer == 0){
-            if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
-                cancel();
-                player.sendTitle("§cDommage, tu as pris trop de temps", "§fTu feras mieux la prochaine fois", 10, 70, 20);
-                player.setGameMode(GameMode.SPECTATOR);
-                player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
-                DAC.getInstance().getPlayersGameList().remove(player);
-                for (Player pls : DAC.getInstance().getPlayersGameList()){
-                    pls.sendMessage("§e" + player.getDisplayName() + " §ca été disqualifié pour avoir été innactif");
-                }
-                player.teleport(Locations.POOL.getLocation());
-                if(DAC.getInstance().getPlayersGameList().size() == 1) {
-                    DAC.getInstance().setGameState(GameState.FINISH);
-                    return;
-                }
-                DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
+        if(timer == 0 && DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
+            cancel();
+            player.sendTitle("§cDommage, tu as pris trop de temps", "§fTu feras mieux la prochaine fois", 10, 70, 20);
+            player.setGameMode(GameMode.SPECTATOR);
+            player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
+            DAC.getInstance().getPlayersGameList().remove(player);
+            for (Player pls : DAC.getInstance().getPlayersGameList()){
+                pls.sendMessage("§e" + player.getDisplayName() + " §ca été disqualifié pour avoir été innactif");
             }
+            player.teleport(Locations.POOL.getLocation());
+            if(DAC.getInstance().getPlayersGameList().size() == 1) {
+                DAC.getInstance().setGameState(GameState.FINISH);
+                return;
+            }
+            DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
         }
         timer--;
     }

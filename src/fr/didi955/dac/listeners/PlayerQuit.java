@@ -2,7 +2,7 @@ package fr.didi955.dac.listeners;
 
 import fr.didi955.dac.DAC;
 import fr.didi955.dac.game.GameState;
-import fr.rushcubeland.commons.Account;;
+import fr.rushcubeland.commons.Account;
 import fr.rushcubeland.commons.rank.RankUnit;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.TitleManager;

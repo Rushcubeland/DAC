@@ -63,45 +63,48 @@ public class AutoStart extends BukkitRunnable {
 
         if (this.timer == 0) {
             cancel();
-            Bukkit.broadcastMessage("§6La partie commence !");
-            MinecraftServer s = (((CraftServer)Bukkit.getServer()).getHandle().getServer());
-            s.setMotd("INPROGRESS");
-            DAC.getInstance().setGameState(GameState.INPROGRESS);
-            for (Player pls : DAC.getInstance().getPlayersServerList()) {
-                pls.teleport(Locations.POOL.getLocation());
-                pls.setGameMode(GameMode.ADVENTURE);
-                pls.getInventory().clear();
-                DAC.getInstance().setScorboardIP(pls);
-            }
-            for(Player pls : DAC.getInstance().getPlayersGameList()){
-                pls.setFlying(false);
-                pls.setAllowFlight(false);
-                Account account = RcbAPI.getInstance().getAccount(pls);
-                account.setCoins(account.getCoins()+10);
-                RcbAPI.getInstance().sendAccountToRedis(account);
-                AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(pls);
-                aStatsDAC.setNbParties(aStatsDAC.getNbParties()+1);
-                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
-                DAC.getInstance().getPlayersPoints().put(pls, 0);
-                RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
-                if(DAC.getInstance().getPlayersBlock().containsKey(pls)){
-                    continue;
-                }
-                for (Material m : Material.values()){
-                    if(m.toString().endsWith("WOOL")){
-                        if(DAC.getInstance().getPlayersBlock().containsValue(m)){
-                            continue;
-                        }
-                        DAC.getInstance().getPlayersBlock().put(pls, m);
-                    }
-                }
-            }
-            DAC.getInstance().getPlayerTurn().chooseFirstPlayer();
-            Game game = new Game();
-            game.runTaskTimer(DAC.getInstance(), 0L, 20L);
-
+            timerFinished();
         }
-
         this.timer--;
+    }
+
+    private void timerFinished(){
+        cancel();
+        Bukkit.broadcastMessage("§6La partie commence !");
+        MinecraftServer s = (((CraftServer)Bukkit.getServer()).getHandle().getServer());
+        s.setMotd("INPROGRESS");
+        DAC.getInstance().setGameState(GameState.INPROGRESS);
+        for (Player pls : DAC.getInstance().getPlayersServerList()) {
+            pls.teleport(Locations.POOL.getLocation());
+            pls.setGameMode(GameMode.ADVENTURE);
+            pls.getInventory().clear();
+            DAC.getInstance().setScorboardIP(pls);
+        }
+        for(Player pls : DAC.getInstance().getPlayersGameList()){
+            pls.setFlying(false);
+            pls.setAllowFlight(false);
+            Account account = RcbAPI.getInstance().getAccount(pls);
+            account.setCoins(account.getCoins()+10);
+            RcbAPI.getInstance().sendAccountToRedis(account);
+            AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(pls);
+            aStatsDAC.setNbParties(aStatsDAC.getNbParties()+1);
+            RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+            DAC.getInstance().getPlayersPoints().put(pls, 0);
+            RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
+            if(DAC.getInstance().getPlayersBlock().containsKey(pls)){
+                continue;
+            }
+            for (Material m : Material.values()){
+                if(m.toString().endsWith("WOOL")){
+                    if(DAC.getInstance().getPlayersBlock().containsValue(m)){
+                        continue;
+                    }
+                    DAC.getInstance().getPlayersBlock().put(pls, m);
+                }
+            }
+        }
+        DAC.getInstance().getPlayerTurn().chooseFirstPlayer();
+        Game game = new Game();
+        game.runTaskTimer(DAC.getInstance(), 0L, 20L);
     }
 }

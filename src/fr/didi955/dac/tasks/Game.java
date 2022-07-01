@@ -73,22 +73,20 @@ public class Game extends BukkitRunnable {
             for(Player pls : DAC.getInstance().getPlayersServerList()){
                 RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
                 RcbAPI.getInstance().getTablist().setTabListPlayer(pls);
-                if(DAC.getInstance().getPlayersPoints().containsKey(pls)){
-                    if(!pls.equals(winner)){
-                        pls.sendMessage(" ");
-                        pls.sendMessage("§e-------------------------");
-                        pls.sendMessage("§6Récompenses:");
-                        pls.sendMessage("§c ");
-                        pls.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(pls));
-                        pls.sendMessage("§eParticipation: §c10 Coins");
-                        pls.sendMessage("§e-------------------------");
-                        if (winner != null) {
-                            pls.showPlayer(RcbAPI.getInstance(), winner);
-                            winner.hidePlayer(RcbAPI.getInstance(), pls);
-                            pls.setGameMode(GameMode.ADVENTURE);
-                            pls.setAllowFlight(true);
-                            pls.setFlying(true);
-                        }
+                if(DAC.getInstance().getPlayersPoints().containsKey(pls) && !pls.equals(winner)){
+                    pls.sendMessage(" ");
+                    pls.sendMessage("§e-------------------------");
+                    pls.sendMessage("§6Récompenses:");
+                    pls.sendMessage("§c ");
+                    pls.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(pls));
+                    pls.sendMessage("§eParticipation: §c10 Coins");
+                    pls.sendMessage("§e-------------------------");
+                    if (winner != null) {
+                        pls.showPlayer(RcbAPI.getInstance(), winner);
+                        winner.hidePlayer(RcbAPI.getInstance(), pls);
+                        pls.setGameMode(GameMode.ADVENTURE);
+                        pls.setAllowFlight(true);
+                        pls.setFlying(true);
                     }
                 }
                 pls.teleport(Locations.POOL.getLocation());
@@ -101,10 +99,6 @@ public class Game extends BukkitRunnable {
             finishFireworks.runTaskTimer(DAC.getInstance(), 0L, 20L);
         }
         this.timer--;
-    }
-
-    public void resetTimer(){
-        timer = 2;
     }
 
     public static void giveItems(Player player){

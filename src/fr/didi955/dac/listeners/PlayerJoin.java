@@ -101,15 +101,6 @@ public class PlayerJoin implements Listener {
         player.getInventory().setItem(8, bed);
     }
 
-    private void initRankPlayerPermissions(Player player, RankUnit rank){
-        if(rank.getPermissions().isEmpty()){
-            return;
-        }
-        for(String perm : rank.getPermissions()){
-            player.addAttachment(RcbAPI.getInstance()).setPermission(perm, true);
-        }
-    }
-
     private void initFlyPlayer(Player player, RankUnit rank){
         if(rank.getPower() <= 40){
             player.setAllowFlight(true);

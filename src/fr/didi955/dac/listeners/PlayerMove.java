@@ -19,8 +19,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.Random;
-
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
  * You cannot redistribute, modify or use it for personnal or commercial purposes
@@ -42,54 +40,49 @@ public class PlayerMove implements Listener {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1F, 1F);
             player.teleport(Locations.LOBBY.getLocation());
         }
-
-        if(DAC.getInstance().isState(GameState.INPROGRESS)){
-            if(DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
-                Location location = player.getLocation();
-                if((location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)) ||
-                        (location.getBlock().getRelative(BlockFace.DOWN).isLiquid() && location.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER))){
-                    Location block = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
-                    Block b = block.getBlock();
-                    b.setType(DAC.getInstance().getPlayersBlock().get(player));
-                    DAC.getInstance().getBlocksLocation().put(b, b.getLocation());
-                    int currentpoints = DAC.getInstance().getPlayersPoints().get(player);
-                    int pointsToGive = (100 * getMultiplierPoints(block));
-                    DAC.getInstance().getPlayersPoints().put(player, currentpoints+pointsToGive);
-                    for (Player pls : DAC.getInstance().getPlayersGameList()){
-                        pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange pour §c" + pointsToGive + " §6points !");
-                    }
-                    player.teleport(Locations.POOL.getLocation());
-                    AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(player);
-                    aStatsDAC.setNbSuccessJumps(aStatsDAC.getNbSuccessJumps()+1);
-                    aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
-                    RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
-                    if(poolIsFull()){
-                        DAC.getInstance().setGameState(GameState.FINISH);
-                        DAC.getInstance().getPlayersGameList().removeIf(pls -> pls != DAC.getInstance().getPlayerTurn().getPlayer());
-                        Bukkit.broadcastMessage("§6La piscine est remplie !");
-                        return;
-                    }
-                    if(DAC.getInstance().getPlayersSpell().containsKey(player)){
-                        Spell spell = DAC.getInstance().getPlayersSpell().get(player);
-                        if(spell instanceof DestructionSpell){
-                            ((DestructionSpell) spell).end();
-                        }
-                        else
-                        {
-                            spell.stop();
-                        }
-                    }
-                    DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
+        if(DAC.getInstance().isState(GameState.INPROGRESS) && DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
+            Location location = player.getLocation();
+            if((location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)) ||
+                    (location.getBlock().getRelative(BlockFace.DOWN).isLiquid() && location.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER))){
+                Location block = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
+                Block b = block.getBlock();
+                b.setType(DAC.getInstance().getPlayersBlock().get(player));
+                DAC.getInstance().getBlocksLocation().put(b, b.getLocation());
+                int currentpoints = DAC.getInstance().getPlayersPoints().get(player);
+                int pointsToGive = (100 * getMultiplierPoints(block));
+                DAC.getInstance().getPlayersPoints().put(player, currentpoints+pointsToGive);
+                for (Player pls : DAC.getInstance().getPlayersGameList()){
+                    pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange pour §c" + pointsToGive + " §6points !");
                 }
-                else if(DAC.getInstance().getPlayersSpell().containsKey(player)){
-                    if(DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){
-                        Block b = location.getBlock().getRelative(BlockFace.DOWN);
-                        if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < 50 && !b.getType().equals(Material.AIR)){
-                            LevitationSpell spell = (LevitationSpell) DAC.getInstance().getPlayersSpell().get(player);
-                            spell.stop();
-                            DAC.getInstance().deathMethod(player);
-                        }
+                player.teleport(Locations.POOL.getLocation());
+                AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(player);
+                aStatsDAC.setNbSuccessJumps(aStatsDAC.getNbSuccessJumps()+1);
+                aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
+                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                if(poolIsFull()){
+                    DAC.getInstance().setGameState(GameState.FINISH);
+                    DAC.getInstance().getPlayersGameList().removeIf(pls -> pls != DAC.getInstance().getPlayerTurn().getPlayer());
+                    Bukkit.broadcastMessage("§6La piscine est remplie !");
+                    return;
+                }
+                if(DAC.getInstance().getPlayersSpell().containsKey(player)){
+                    Spell spell = DAC.getInstance().getPlayersSpell().get(player);
+                    if(spell instanceof DestructionSpell){
+                        ((DestructionSpell) spell).end();
                     }
+                    else
+                    {
+                        spell.stop();
+                    }
+                }
+                DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
+            }
+            else if(DAC.getInstance().getPlayersSpell().containsKey(player) && DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){
+                Block b = location.getBlock().getRelative(BlockFace.DOWN);
+                if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < 50 && !b.getType().equals(Material.AIR)){
+                    LevitationSpell spell = (LevitationSpell) DAC.getInstance().getPlayersSpell().get(player);
+                    spell.stop();
+                    DAC.getInstance().deathMethod(player);
                 }
             }
         }

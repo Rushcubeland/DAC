@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
