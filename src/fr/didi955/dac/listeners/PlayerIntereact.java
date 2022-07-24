@@ -52,7 +52,9 @@ public class PlayerIntereact implements Listener {
                 DAC.getInstance().getPlayerTurn().getPlayer().equals(player) && DAC.getInstance().getPlayersSpell().containsKey(player) &&
                 DAC.getInstance().getPlayersSpell().get(player) instanceof DestructionSpell){
             DestructionSpell spell = (DestructionSpell) DAC.getInstance().getPlayersSpell().get(player);
-            spell.activate();
+            if(spell != null){
+                spell.activate();
+            }
         }
     }
 

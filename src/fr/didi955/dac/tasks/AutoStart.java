@@ -5,6 +5,7 @@ import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.commons.Account;
+import fr.rushcubeland.commons.data.callbacks.AsyncCallBack;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
 import net.minecraft.server.v1_15_R1.MinecraftServer;
@@ -83,12 +84,23 @@ public class AutoStart extends BukkitRunnable {
         for(Player pls : DAC.getInstance().getPlayersGameList()){
             pls.setFlying(false);
             pls.setAllowFlight(false);
-            Account account = RcbAPI.getInstance().getAccount(pls);
-            account.setCoins(account.getCoins()+10);
-            RcbAPI.getInstance().sendAccountToRedis(account);
-            AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(pls);
-            aStatsDAC.setNbParties(aStatsDAC.getNbParties()+1);
-            RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+            pls.setGameMode(GameMode.SPECTATOR);
+            RcbAPI.getInstance().getAccount(pls, new AsyncCallBack() {
+                @Override
+                public void onQueryComplete(Object result) {
+                    Account account = (Account) result;
+                    account.setCoins(account.getCoins()+10);
+                    RcbAPI.getInstance().sendAccountToRedis(account);
+                }
+            });
+            RcbAPI.getInstance().getAccountStatsDAC(pls, new AsyncCallBack() {
+                @Override
+                public void onQueryComplete(Object result) {
+                    AStatsDAC aStatsDAC = (AStatsDAC) result;
+                    aStatsDAC.setNbParties(aStatsDAC.getNbParties()+1);
+                    RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                }
+            });
             DAC.getInstance().getPlayersPoints().put(pls, 0);
             RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
             if(DAC.getInstance().getPlayersBlock().containsKey(pls)){

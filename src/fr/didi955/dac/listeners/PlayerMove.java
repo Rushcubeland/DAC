@@ -7,11 +7,10 @@ import fr.didi955.dac.spells.DestructionSpell;
 import fr.didi955.dac.spells.LevitationSpell;
 import fr.didi955.dac.spells.Spell;
 import fr.rushcubeland.commons.AStatsDAC;
+import fr.rushcubeland.commons.data.callbacks.AsyncCallBack;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import fr.rushcubeland.rcbcore.bukkit.map.MapUnit;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -44,7 +43,7 @@ public class PlayerMove implements Listener {
             Location location = player.getLocation();
             if((location.getBlock().isLiquid() && location.getBlock().getType().equals(Material.WATER)) ||
                     (location.getBlock().getRelative(BlockFace.DOWN).isLiquid() && location.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER))){
-                Location block = new Location(Bukkit.getWorld("DAC"), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
+                Location block = new Location(Bukkit.getWorld(MapUnit.DAC.getPath()), location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ());
                 Block b = block.getBlock();
                 b.setType(DAC.getInstance().getPlayersBlock().get(player));
                 DAC.getInstance().getBlocksLocation().put(b, b.getLocation());
@@ -54,11 +53,7 @@ public class PlayerMove implements Listener {
                 for (Player pls : DAC.getInstance().getPlayersGameList()){
                     pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange pour §c" + pointsToGive + " §6points !");
                 }
-                player.teleport(Locations.POOL.getLocation());
-                AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(player);
-                aStatsDAC.setNbSuccessJumps(aStatsDAC.getNbSuccessJumps()+1);
-                aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
-                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                player.setGameMode(GameMode.SPECTATOR);
                 if(poolIsFull()){
                     DAC.getInstance().setGameState(GameState.FINISH);
                     DAC.getInstance().getPlayersGameList().removeIf(pls -> pls != DAC.getInstance().getPlayerTurn().getPlayer());
@@ -76,6 +71,15 @@ public class PlayerMove implements Listener {
                     }
                 }
                 DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
+                RcbAPI.getInstance().getAccountStatsDAC(player, new AsyncCallBack() {
+                    @Override
+                    public void onQueryComplete(Object result) {
+                        AStatsDAC aStatsDAC = (AStatsDAC) result;
+                        aStatsDAC.setNbSuccessJumps(aStatsDAC.getNbSuccessJumps()+1);
+                        aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
+                        RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                    }
+                });
             }
             else if(DAC.getInstance().getPlayersSpell().containsKey(player) && DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){
                 Block b = location.getBlock().getRelative(BlockFace.DOWN);

@@ -4,6 +4,7 @@ import fr.didi955.dac.DAC;
 import fr.didi955.dac.spells.SpellUnit;
 import fr.didi955.dac.tasks.Afk;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -22,6 +23,8 @@ import java.util.Random;
 public class PlayerTurn {
 
     private Player playerTurn;
+
+    public boolean first;
     private int position;
     private Afk afk;
     private int nextPositionRequired = 1;
@@ -44,8 +47,10 @@ public class PlayerTurn {
     }
 
     public void chooseFirstPlayer(){
+        first = true;
         position = new Random().nextInt(DAC.getInstance().getPlayersGameList().size());
         playerTurn = DAC.getInstance().getPlayersGameList().get(position);
+        playerTurn.setGameMode(GameMode.ADVENTURE);
         playerTurn.teleport(Locations.DIVING_PLATFORM.getLocation());
         SpellUnit.giveItems(playerTurn);
     }
@@ -61,6 +66,7 @@ public class PlayerTurn {
     }
 
     public void initNextPlayer(int i){
+        first = false;
         playerTurn.getInventory().clear();
         for (PotionEffect effect : playerTurn.getActivePotionEffects()) {
             playerTurn.removePotionEffect(effect.getType());
@@ -93,7 +99,7 @@ public class PlayerTurn {
         setNextPositionRequired(1);
         SpellUnit.giveItems(playerTurn);
         if(this.nextspell == SpellUnit.DISTORSION){
-            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 2000, 3));
+            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 99999, 2));
             setNextspell(null);
         }
         Afk afk = new Afk(playerTurn);
@@ -102,6 +108,7 @@ public class PlayerTurn {
     }
 
     public void teleportPlayer(){
+        playerTurn.setGameMode(GameMode.ADVENTURE);
         playerTurn.teleport(Locations.DIVING_PLATFORM.getLocation());
     }
 

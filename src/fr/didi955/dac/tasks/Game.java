@@ -5,6 +5,7 @@ import fr.didi955.dac.game.GameState;
 import fr.didi955.dac.game.Locations;
 import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.commons.Account;
+import fr.rushcubeland.commons.data.callbacks.AsyncCallBack;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.ItemBuilder;
 import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
@@ -13,6 +14,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
@@ -45,7 +47,7 @@ public class Game extends BukkitRunnable {
             DAC.getInstance().getPlayerTurn().makeAnnouncement();
         }
 
-        if(timer == 0){
+        if(timer == 0 && !DAC.getInstance().getPlayerTurn().first){
             DAC.getInstance().getPlayerTurn().teleportPlayer();
         }
 
@@ -53,13 +55,23 @@ public class Game extends BukkitRunnable {
             cancel();
             Player winner = DAC.getInstance().getPlayersGameList().get(0);
             if (winner != null) {
-                Account account = RcbAPI.getInstance().getAccount(winner);
-                AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(winner);
-                account.setCoins(account.getCoins() + 100);
-                aStatsDAC.setWins(aStatsDAC.getWins() + 1);
-                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
-                RcbAPI.getInstance().sendAccountToRedis(account);
-                Bukkit.broadcastMessage(account.getRank().getPrefix() + winner.getDisplayName() + " §aa gagné la partie !");
+                RcbAPI.getInstance().getAccount(winner, new AsyncCallBack() {
+                    @Override
+                    public void onQueryComplete(Object result) {
+                        Account account = (Account) result;
+                        account.setCoins(account.getCoins() + 100);
+                        RcbAPI.getInstance().sendAccountToRedis(account);
+                        Bukkit.broadcastMessage(account.getRank().getPrefix() + winner.getDisplayName() + " §aa gagné la partie !");
+                    }
+                });
+                RcbAPI.getInstance().getAccountStatsDAC(winner, new AsyncCallBack() {
+                    @Override
+                    public void onQueryComplete(Object result) {
+                        AStatsDAC aStatsDAC = (AStatsDAC) result;
+                        aStatsDAC.setWins(aStatsDAC.getWins() + 1);
+                        RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                    }
+                });
                 winner.sendTitle("§6Félicitations !", "§fVous avez gagné", 10, 70, 20);
                 winner.sendMessage(" ");
                 winner.sendMessage("§e-------------------------");
@@ -71,6 +83,9 @@ public class Game extends BukkitRunnable {
                 winner.sendMessage("§e-------------------------");
             }
             for(Player pls : DAC.getInstance().getPlayersServerList()){
+                for (PotionEffect effect : pls.getActivePotionEffects()) {
+                    pls.removePotionEffect(effect.getType());
+                }
                 RcbAPI.getInstance().getTablist().resetTabListPlayer(pls);
                 RcbAPI.getInstance().getTablist().setTabListPlayer(pls);
                 if(DAC.getInstance().getPlayersPoints().containsKey(pls) && !pls.equals(winner)){
@@ -82,13 +97,10 @@ public class Game extends BukkitRunnable {
                     pls.sendMessage("§eParticipation: §c10 Coins");
                     pls.sendMessage("§e-------------------------");
                     if (winner != null) {
-                        pls.showPlayer(RcbAPI.getInstance(), winner);
-                        winner.hidePlayer(RcbAPI.getInstance(), pls);
-                        pls.setGameMode(GameMode.ADVENTURE);
-                        pls.setAllowFlight(true);
-                        pls.setFlying(true);
+                        pls.showPlayer(DAC.getInstance(), winner);
                     }
                 }
+                pls.setGameMode(GameMode.ADVENTURE);
                 pls.teleport(Locations.POOL.getLocation());
                 pls.getInventory().clear();
                 giveItems(pls);

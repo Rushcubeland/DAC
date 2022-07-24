@@ -60,7 +60,6 @@ public class PlayerJoin implements Listener {
             for(Player pls : DAC.getInstance().getPlayersGameList()){
                 pls.hidePlayer(DAC.getInstance(), player);
             }
-
             return;
         }
 

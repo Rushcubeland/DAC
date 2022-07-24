@@ -2,6 +2,7 @@ package fr.didi955.dac.spells;
 
 import fr.didi955.dac.DAC;
 import fr.rushcubeland.commons.AStatsDAC;
+import fr.rushcubeland.commons.data.callbacks.AsyncCallBack;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -35,9 +36,14 @@ public abstract class Spell {
         }
         DAC.getInstance().getPlayersSpell().put(player, this);
         run();
-        AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(getPlayer());
-        aStatsDAC.setNbSortsUsed(aStatsDAC.getNbSortsUsed()+1);
-        RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+        RcbAPI.getInstance().getAccountStatsDAC(player, new AsyncCallBack() {
+            @Override
+            public void onQueryComplete(Object result) {
+                AStatsDAC aStatsDAC = (AStatsDAC) result;
+                aStatsDAC.setNbSortsUsed(aStatsDAC.getNbSortsUsed()+1);
+                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+            }
+        });
     }
 
     public boolean isActivated(){

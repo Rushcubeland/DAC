@@ -59,7 +59,6 @@ public class FinishFireworks extends BukkitRunnable {
                 for (Player pls : Bukkit.getOnlinePlayers()) {
                     Network.sendPlayerToServer(pls, Network.getBestServer(pls, ServerGroup.Lobby));
                 }
-
                 Bukkit.spigot().restart();
             }
         }.runTaskLater(DAC.getInstance(), 800L);

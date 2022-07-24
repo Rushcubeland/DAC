@@ -7,6 +7,7 @@ import fr.didi955.dac.listeners.*;
 import fr.didi955.dac.spells.Spell;
 import fr.didi955.dac.tasks.Game;
 import fr.rushcubeland.commons.AStatsDAC;
+import fr.rushcubeland.commons.data.callbacks.AsyncCallBack;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.map.MapGroup;
 import fr.rushcubeland.rcbcore.bukkit.map.MapUnit;
@@ -177,26 +178,31 @@ public class DAC extends JavaPlugin {
     }
 
     public void deathMethod(Player player){
-        AStatsDAC aStatsDAC = RcbAPI.getInstance().getAccountStatsDAC(player);
-        aStatsDAC.setLoses(aStatsDAC.getLoses()+1);
-        aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
-        aStatsDAC.setNbFailJumps(aStatsDAC.getNbFailJumps()+1);
-        RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
-        player.sendTitle("§cDommage, tu t'es loupé !", "§fTu feras mieux la prochaine fois", 10, 70, 20);
-        player.setGameMode(GameMode.SPECTATOR);
-        player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
-        DAC.getInstance().getPlayersGameList().remove(player);
-        for (Player pls : DAC.getInstance().getPlayersGameList()){
-            pls.sendMessage("§e" + player.getDisplayName() + " §ca hurté un bloc !");
-        }
-        player.teleport(Locations.POOL.getLocation());
-        if(DAC.getInstance().getPlayersGameList().size() == 1) {
-            DAC.getInstance().setGameState(GameState.FINISH);
-            return;
-        }
-        DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
-        player.getInventory().clear();
-        Game.giveItems(player);
+        RcbAPI.getInstance().getAccountStatsDAC(player, new AsyncCallBack() {
+            @Override
+            public void onQueryComplete(Object result) {
+                AStatsDAC aStatsDAC = (AStatsDAC) result;
+                aStatsDAC.setLoses(aStatsDAC.getLoses()+1);
+                aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
+                aStatsDAC.setNbFailJumps(aStatsDAC.getNbFailJumps()+1);
+                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                player.sendTitle("§cDommage, tu t'es loupé !", "§fTu feras mieux la prochaine fois", 10, 70, 20);
+                player.setGameMode(GameMode.SPECTATOR);
+                player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
+                DAC.getInstance().getPlayersGameList().remove(player);
+                for (Player pls : DAC.getInstance().getPlayersGameList()){
+                    pls.sendMessage("§e" + player.getDisplayName() + " §ca hurté un bloc !");
+                }
+                player.teleport(Locations.POOL.getLocation());
+                if(DAC.getInstance().getPlayersGameList().size() == 1) {
+                    DAC.getInstance().setGameState(GameState.FINISH);
+                    return;
+                }
+                DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
+                player.getInventory().clear();
+                Game.giveItems(player);
+            }
+        });
     }
 
     private void chooseMap(){
