@@ -1,6 +1,6 @@
 name: DAC
 author: didi955
-main: fr.didi955.dac.DAC
+main: fr.rushcubeland.dac.DAC
 version: 1.0-SNAPSHOT
 api-version: 1.15
 depend: [RcbCore]
