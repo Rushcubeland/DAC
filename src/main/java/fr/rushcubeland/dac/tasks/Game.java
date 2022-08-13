@@ -46,7 +46,7 @@ public class Game extends BukkitRunnable {
             DAC.getInstance().getPlayerTurn().makeAnnouncement();
         }
 
-        if(timer == 0 && !DAC.getInstance().getPlayerTurn().first){
+        if(timer == 0 && !DAC.getInstance().getPlayerTurn().isFirst()){
             DAC.getInstance().getPlayerTurn().teleportPlayer();
         }
 

@@ -18,10 +18,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
@@ -216,7 +216,7 @@ public class DAC extends JavaPlugin {
                 mapUnits.add(mapUnit);
             }
         }
-        final int randInt = new Random().nextInt(mapUnits.size());
+        final int randInt = new SecureRandom().nextInt(mapUnits.size());
         setMap(mapUnits.get(randInt));
         Bukkit.getServer().createWorld(new WorldCreator(getMap().getPath()));
         Locations.POOL.getLocation().setWorld(Bukkit.getWorld(getMap().getPath()));

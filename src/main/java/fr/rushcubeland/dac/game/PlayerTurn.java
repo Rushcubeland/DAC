@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
@@ -22,20 +22,20 @@ import java.util.Random;
 
 public class PlayerTurn {
 
-    private Player playerTurn;
+    private Player player;
 
-    public boolean first;
+    private boolean first;
     private int position;
     private Afk afk;
     private int nextPositionRequired = 1;
     private SpellUnit nextspell;
 
     public Player getPlayer() {
-        return playerTurn;
+        return player;
     }
 
     public void setPlayerTurn(Player playerTurn) {
-        this.playerTurn = playerTurn;
+        this.player= playerTurn;
     }
 
     public void setNextPositionRequired(int nextPositionRequired) {
@@ -48,18 +48,18 @@ public class PlayerTurn {
 
     public void chooseFirstPlayer(){
         first = true;
-        position = new Random().nextInt(DAC.getInstance().getPlayersGameList().size());
-        playerTurn = DAC.getInstance().getPlayersGameList().get(position);
-        playerTurn.setGameMode(GameMode.ADVENTURE);
-        playerTurn.teleport(Locations.DIVING_PLATFORM.getLocation());
-        SpellUnit.giveItems(playerTurn);
+        position = new SecureRandom().nextInt(DAC.getInstance().getPlayersGameList().size());
+        this.player= DAC.getInstance().getPlayersGameList().get(position);
+        this.player.setGameMode(GameMode.ADVENTURE);
+        this.player.teleport(Locations.DIVING_PLATFORM.getLocation());
+        SpellUnit.giveItems(this.player);
     }
 
     public void makeAnnouncement(){
-        playerTurn.sendMessage("§eC'est votre tour !");
-        playerTurn.sendTitle("§eC'est votre tour !", "§6Bonne chance", 10, 70, 20);
+        this.player.sendMessage("§eC'est votre tour !");
+        this.player.sendTitle("§eC'est votre tour !", "§6Bonne chance", 10, 70, 20);
         for(Player pls : DAC.getInstance().getPlayersGameList()){
-            pls.sendMessage("§6C'est au tour de §c" + this.playerTurn.getDisplayName());
+            pls.sendMessage("§6C'est au tour de §c" + this.player.getDisplayName());
             pls.playSound(pls.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
         }
 
@@ -67,9 +67,9 @@ public class PlayerTurn {
 
     public void initNextPlayer(int i){
         first = false;
-        playerTurn.getInventory().clear();
-        for (PotionEffect effect : playerTurn.getActivePotionEffects()) {
-            playerTurn.removePotionEffect(effect.getType());
+        this.player.getInventory().clear();
+        for (PotionEffect effect : this.player.getActivePotionEffects()) {
+            this.player.removePotionEffect(effect.getType());
         }
         if(afk != null){
             Bukkit.getScheduler().cancelTask(this.afk.getTaskId());
@@ -97,26 +97,30 @@ public class PlayerTurn {
         makeAnnouncement();
         teleportPlayer();
         setNextPositionRequired(1);
-        SpellUnit.giveItems(playerTurn);
+        SpellUnit.giveItems(this.player);
         if(this.nextspell == SpellUnit.DISTORSION){
             getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 99999, 2));
             setNextspell(null);
         }
-        Afk afk = new Afk(playerTurn);
+        Afk afk = new Afk(this.player);
         afk.runTaskTimer(DAC.getInstance(), 0L, 20L);
         this.afk = afk;
     }
 
     public void teleportPlayer(){
-        playerTurn.setGameMode(GameMode.ADVENTURE);
-        playerTurn.teleport(Locations.DIVING_PLATFORM.getLocation());
+        this.player.setGameMode(GameMode.ADVENTURE);
+        this.player.teleport(Locations.DIVING_PLATFORM.getLocation());
     }
 
     public String getPlayerName(){
-        if(this.playerTurn == null){
+        if(this.player == null){
             return "Choix en cours";
         }
-        return this.playerTurn.getDisplayName();
+        return this.player.getDisplayName();
+    }
+
+    public boolean isFirst() {
+        return first;
     }
 
     public SpellUnit getNextspell() {
