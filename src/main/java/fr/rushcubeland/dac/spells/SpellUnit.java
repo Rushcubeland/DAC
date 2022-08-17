@@ -18,7 +18,8 @@ public enum SpellUnit {
     LEVITATION("Sort de lévitation", 700, LevitationSpell.class, Material.SUGAR),
     EMPRISONNEMENT("Sort d'emprisonnement", 800, EmprisonnementSpell.class , Material.BARRIER),
     DISTORSION("Sort de distorsion", 1000, DistorsionSpell.class, Material.ENDER_PEARL),
-    DESTRUCTION("Sort de destruction", 500, DestructionSpell.class, Material.TNT);
+    DESTRUCTION("Sort de destruction", 500, DestructionSpell.class, Material.TNT),
+    TRISMEGISTE("Sort trismégiste", 1300, TrismegisteSpell.class, Material.FIREWORK_ROCKET);
 
     private final String name;
     private final int price;

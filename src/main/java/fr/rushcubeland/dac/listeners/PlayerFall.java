@@ -1,10 +1,11 @@
 package fr.rushcubeland.dac.listeners;
 
+import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.dac.game.GameState;
-import fr.rushcubeland.dac.spells.DestructionSpell;
-import fr.rushcubeland.dac.spells.LevitationSpell;
-import fr.rushcubeland.dac.spells.Spell;
+import fr.rushcubeland.dac.spells.*;
+import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,12 +33,24 @@ public class PlayerFall implements Listener {
                         if(spell instanceof DestructionSpell){
                             ((DestructionSpell) spell).end();
                         }
+                        else if(spell instanceof TrismegisteSpell && spell.isActivated()){
+                            for (Player pls : DAC.getInstance().getPlayersGameList()){
+                                pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange grâce au §c" + SpellUnit.TRISMEGISTE.getName());
+                            }
+                            player.setGameMode(GameMode.SPECTATOR);
+                            spell.stop();
+                            RcbAPI.getInstance().getAccountStatsDAC(player, result -> {
+                                AStatsDAC aStatsDAC = (AStatsDAC) result;
+                                aStatsDAC.setNbSuccessJumps(aStatsDAC.getNbSuccessJumps()+1);
+                                aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
+                                RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
+                            });
+                            DAC.getInstance().getPlayerTurn().initNextPlayer(DAC.getInstance().getPlayerTurn().getNextPositionRequired());
+                            return;
+                        }
                         else
                         {
                             spell.stop();
-                        }
-                        if(spell instanceof LevitationSpell){
-                            return;
                         }
                     }
                     DAC.getInstance().deathMethod(player);

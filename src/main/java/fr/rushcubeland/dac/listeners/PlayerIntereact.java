@@ -66,6 +66,9 @@ public class PlayerIntereact implements Listener {
                 return;
             }
             if(DAC.getInstance().getPlayersPoints().containsKey(player)){
+                if(event.getItem() == null) {
+                    return;
+                }
                 if(event.getItem().getType().equals(SpellUnit.DESTRUCTION.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.DESTRUCTION.getPrice()){
                     Constructor<? extends Spell> constructor = SpellUnit.DESTRUCTION.getClazz().getConstructor(Player.class);
                     Spell spell = constructor.newInstance(player);
@@ -92,6 +95,13 @@ public class PlayerIntereact implements Listener {
                     Spell spell = constructor.newInstance(player);
                     spell.use();
                     DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.DISTORSION.getPrice());
+                    return;
+                }
+                if(event.getItem().getType().equals(SpellUnit.TRISMEGISTE.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.TRISMEGISTE.getPrice()){
+                    Constructor<? extends Spell> constructor = SpellUnit.TRISMEGISTE.getClazz().getConstructor(Player.class);
+                    Spell spell = constructor.newInstance(player);
+                    spell.use();
+                    DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.TRISMEGISTE.getPrice());
                     return;
                 }
                 player.sendMessage("§cVous n'avez pas assez de points pour utiliser ce sort !");

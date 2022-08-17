@@ -23,16 +23,6 @@ public class DestructionSpell extends Spell {
     }
 
     @Override
-    public void use() {
-        super.use();
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-    }
-
-    @Override
     public String getName(){
         return "Destruction";
     }

@@ -4,6 +4,8 @@ import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,7 +32,7 @@ public abstract class Spell {
     }
 
     public void use(){
-        if(this instanceof LevitationSpell || this instanceof EmprisonnementSpell || this instanceof DistorsionSpell){
+        if(this instanceof LevitationSpell || this instanceof EmprisonnementSpell || this instanceof DistorsionSpell || this instanceof TrismegisteSpell){
             activate();
         }
         DAC.getInstance().getPlayersSpell().put(player, this);
@@ -47,6 +49,7 @@ public abstract class Spell {
     }
 
     public void stop(){
+        this.activate = false;
         DAC.getInstance().getPlayersSpell().remove(player);
         cancel();
     }
@@ -65,6 +68,12 @@ public abstract class Spell {
         if(getBukkitTask() != null){
             getBukkitTask().cancel();
         }
+    }
+
+    public void broadcast(){
+        Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
+                + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
+        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1F, 1F);
     }
 
     public Player getPlayer() {

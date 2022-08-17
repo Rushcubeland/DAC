@@ -26,14 +26,7 @@ public class LevitationSpell extends Spell {
     public void use() {
         super.use();
         getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, timer*20, 250));
-        Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
-                + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
-        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1F, 1F);
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
+        broadcast();
     }
 
     @Override
@@ -56,7 +49,6 @@ public class LevitationSpell extends Spell {
             getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
 
             for(int i = 0; i < 8; i++){
-                // TEST
                 location.setX(location.getBlockX()+1);
                 getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
                 location.setX(location.getBlockX()-2);
@@ -78,6 +70,5 @@ public class LevitationSpell extends Spell {
             timer--;
 
         }, 0L, 20L));
-
     }
 }
