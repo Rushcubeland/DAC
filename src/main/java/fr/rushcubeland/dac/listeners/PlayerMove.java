@@ -77,15 +77,9 @@ public class PlayerMove implements Listener {
             }
             else if(DAC.getInstance().getPlayersSpell().containsKey(player) && DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){
                 Block b = location.getBlock().getRelative(BlockFace.DOWN);
-                if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < Locations.DIVING_PLATFORM.getLocation().getY()-5 && !b.getType().equals(Material.AIR)){
+                if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < Locations.DIVING_PLATFORM.getLocation().getY()-3 && !b.getType().equals(Material.AIR)){
                     LevitationSpell spell = (LevitationSpell) DAC.getInstance().getPlayersSpell().get(player);
                     spell.stop();
-                    DAC.getInstance().deathMethod(player);
-                }
-            }
-            else if(DAC.getInstance().getPlayersSpell().containsKey(player) && DAC.getInstance().getPlayersSpell().get(player).isActivated() && (DAC.getInstance().getPlayersSpell().get(player) instanceof TrismegisteSpell || DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell)){
-                Block b = location.getBlock().getRelative(BlockFace.DOWN);
-                if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < Locations.DIVING_PLATFORM.getLocation().getY()-3 && !b.getType().equals(Material.AIR)){
                     DAC.getInstance().deathMethod(player);
                 }
             }
