@@ -19,9 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
@@ -50,6 +48,8 @@ public class DAC extends JavaPlugin {
 
     private final HashMap<Player, Spell> playersSpell = new HashMap<>();
 
+    public static final String DAC_PREFIX = ChatColor.YELLOW + "[" + ChatColor.AQUA + "Dé " + ChatColor.GOLD + "à " + ChatColor.AQUA + "Coudre" + ChatColor.YELLOW + "]";
+
     private int maxPlayer;
     private MapUnit map = null;
 
@@ -68,7 +68,6 @@ public class DAC extends JavaPlugin {
     @Override
     public void onDisable() {
         WorldManager.replaceWorld(map.getPath(), true);
-        instance = null;
     }
 
     private void initListeners(){
@@ -88,100 +87,62 @@ public class DAC extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
     }
 
-    public void setScorboardW(Player player) {
-        if(RcbAPI.getInstance().boards.containsKey(player)){
-            ScoreboardSign sc = RcbAPI.getInstance().boards.get(player);
-            sc.setLine(1, "§b");
-            sc.setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
-            sc.setLine(3, "§l  ");
-            sc.setLine(4, "§6Map: §c" + map.getName());
-            sc.setLine(5, "§a ");
-            sc.setLine(6, "§cEn attente de joueurs");
-            sc.setLine(7, "§l");
-            sc.setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
-            sc.setLine(9, "§4      ");
-            sc.setLine(10, "§eplay.rushcubeland.fr");
-        }
-        else
-        {
-            ScoreboardSign scoreboard = new ScoreboardSign(player, "§bDé §6à §bCoudre");
-            scoreboard.create();
-            scoreboard.setLine(1, "§b");
-            scoreboard.setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
-            scoreboard.setLine(3, "§l  ");
-            scoreboard.setLine(4, "§6Map: §c" + map.getName());
-            scoreboard.setLine(5, "§a ");
-            scoreboard.setLine(6, "§cEn attente de joueurs");
-            scoreboard.setLine(7, "§l");
-            scoreboard.setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
-            scoreboard.setLine(9, "§4      ");
-            scoreboard.setLine(10, "§eplay.rushcubeland.fr");
-            RcbAPI.getInstance().boards.put(player, scoreboard);
+    private void fillScoreboard(ScoreboardSign sc, List<String> lines){
+        if(sc != null){
+            for(int i = 1; i <= lines.size(); i++){
+                sc.setLine(i, lines.get(i));
+            }
         }
     }
 
-    public void setScorboardS(Player player) {
+    public void setScoreboard(Player player, GameState currentState){
+        String ipText = ChatColor.YELLOW + "play.rushcubeland.fr";
+        String mapText = ChatColor.GOLD + "Map: " + ChatColor.RED + map.getName();
+        String playersRemain = ChatColor.GOLD + "Joueurs restant: " + ChatColor.RED + getPlayersGameList().size();
+        String currentSlots = ChatColor.GRAY + "<" + getPlayersGameList().size() + ChatColor.YELLOW + "/" + ChatColor.GOLD + DAC.getInstance().getMaxPlayer() + ChatColor.GRAY + ">";
+        List<String> lines = null;
+        ScoreboardSign sc;
         if(RcbAPI.getInstance().boards.containsKey(player)){
-            ScoreboardSign sc = RcbAPI.getInstance().boards.get(player);
-            sc.setLine(1, "§b");
-            sc.setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
-            sc.setLine(3, "§l  ");
-            sc.setLine(4, "§6Map: §c" + map.getName());
-            sc.setLine(5, "§a ");
-            sc.setLine(6, "§6Lancement dans: §e");
-            sc.setLine(7, "§l");
-            sc.setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
-            sc.setLine(9, "§4      ");
-            sc.setLine(10, "§eplay.rushcubeland.fr");
+            sc = RcbAPI.getInstance().boards.get(player);
         }
         else
         {
-            ScoreboardSign scoreboard = new ScoreboardSign(player, "§bDé §6à §bCoudre");
-            scoreboard.create();
-            scoreboard.setLine(1, "§b");
-            scoreboard.setLine(2, "§eBoosters actifs: §c" + 0 + "§cx §6+100%");
-            scoreboard.setLine(3, "§l  ");
-            scoreboard.setLine(4, "§6Map: §c" + map.getName());
-            scoreboard.setLine(5, "§a ");
-            scoreboard.setLine(6, "§6Lancement dans: §e");
-            scoreboard.setLine(7, "§l");
-            scoreboard.setLine(8, "§7<" + getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
-            scoreboard.setLine(9, "§4      ");
-            scoreboard.setLine(10, "§eplay.rushcubeland.fr");
-            RcbAPI.getInstance().boards.put(player, scoreboard);
+            sc = new ScoreboardSign(player, ChatColor.AQUA + "Dé " + ChatColor.GOLD + "à " + ChatColor.AQUA + "Coudre");
+            RcbAPI.getInstance().boards.put(player, sc);
         }
-    }
-
-    public void setScorboardIP(Player player) {
-        if(RcbAPI.getInstance().boards.containsKey(player)){
-            ScoreboardSign sc = RcbAPI.getInstance().boards.get(player);
-            sc.setLine(1, "§b");
-            sc.setLine(2, "§6Map: §e" + map.getName());
-            sc.setLine(3, "§1 ");
-            sc.setLine(4, "§6Tour: §e");
-            sc.setLine(5, "§a ");
-            sc.setLine(6, "§cPoints: §60");
-            sc.setLine(7, "§l");
-            sc.setLine(8, "§6Joueurs restant: §c" + getPlayersGameList().size());
-            sc.setLine(9, "§4      ");
-            sc.setLine(10, "§eplay.rushcubeland.fr");
+        switch (currentState) {
+            case WAITING ->
+                    lines = Arrays.asList(" ", ChatColor.YELLOW + "Boosters actifs: " + ChatColor.RED + 0 + ChatColor.RED + "x " + ChatColor.GOLD + "+100%",
+                            " ",
+                            mapText,
+                            " ",
+                            ChatColor.RED + "En attente de joueurs...",
+                            " ",
+                            currentSlots,
+                            " ",
+                            ipText);
+            case STARTING ->
+                    lines = Arrays.asList(" ", ChatColor.YELLOW + "Boosters actifs: " + ChatColor.RED + 0 + ChatColor.RED + "x " + ChatColor.GOLD + "+100%",
+                            " ",
+                            mapText,
+                            " ",
+                            ChatColor.GOLD + "Lancement dans: " + ChatColor.YELLOW,
+                            " ",
+                            currentSlots,
+                            " ",
+                            ipText);
+            case INPROGRESS -> lines = Arrays.asList(" ",
+                    mapText,
+                    " ",
+                    ChatColor.GOLD + "Tour: " + ChatColor.YELLOW,
+                    " ",
+                    ChatColor.RED + "Points: " + ChatColor.GOLD,
+                    " ",
+                    playersRemain,
+                    " ",
+                    ipText);
         }
-        else
-        {
-            ScoreboardSign scoreboard = new ScoreboardSign(player, "§bDé §6à §bCoudre");
-            scoreboard.create();
-            scoreboard.setLine(1, "§b");
-            scoreboard.setLine(2, "§6Map: §e" + map.getName());
-            scoreboard.setLine(3, "§1 ");
-            scoreboard.setLine(4, "§6Tour: §e");
-            scoreboard.setLine(5, "§a ");
-            scoreboard.setLine(6, "§cPoints: §60");
-            scoreboard.setLine(7, "§l");
-            scoreboard.setLine(8, "§6Joueurs restant: §c" + getPlayersGameList().size());
-            scoreboard.setLine(9, "§4      ");
-            scoreboard.setLine(10, "§eplay.rushcubeland.fr");
-            RcbAPI.getInstance().boards.put(player, scoreboard);
-        }
+        fillScoreboard(sc, lines);
     }
 
     public void deathMethod(Player player){
@@ -191,12 +152,12 @@ public class DAC extends JavaPlugin {
             aStatsDAC.setNbJumps(aStatsDAC.getNbJumps()+1);
             aStatsDAC.setNbFailJumps(aStatsDAC.getNbFailJumps()+1);
             RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
-            player.sendTitle("§cDommage, tu t'es loupé !", "§fTu feras mieux la prochaine fois", 10, 70, 20);
+            player.sendTitle(ChatColor.RED + "Dommage, tu t'es loupé !", ChatColor.WHITE + "Tu feras mieux la prochaine fois", 10, 70, 20);
             player.setGameMode(GameMode.SPECTATOR);
             player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
             DAC.getInstance().getPlayersGameList().remove(player);
             for (Player pls : DAC.getInstance().getPlayersGameList()){
-                pls.sendMessage("§e" + player.getDisplayName() + " §ca hurté un bloc !");
+                pls.sendMessage(ChatColor.YELLOW + player.getDisplayName() +ChatColor.RED + "a hurté un bloc !");
             }
             player.teleport(Locations.POOL.getLocation());
             if(DAC.getInstance().getPlayersGameList().size() == 1) {
@@ -232,31 +193,31 @@ public class DAC extends JavaPlugin {
     }
 
     public void setMap(MapUnit map) {
-        this.map = map;
-    }
+            this.map = map;
+        }
 
-    public HashMap<Player, Spell> getPlayersSpell() {
-        return playersSpell;
-    }
+        public HashMap<Player, Spell> getPlayersSpell() {
+            return playersSpell;
+        }
 
-    public int getMaxPlayer() {
-        return maxPlayer;
-    }
+        public int getMaxPlayer() {
+            return maxPlayer;
+        }
 
-    public ArrayList<Player> getPlayersGameList() {
-        return playersGameList;
-    }
+        public ArrayList<Player> getPlayersGameList() {
+            return playersGameList;
+        }
 
-    public ArrayList<Player> getPlayersServerList() {
-        return playersServerList;
-    }
+        public ArrayList<Player> getPlayersServerList() {
+            return playersServerList;
+        }
 
-    public boolean isState(GameState gameState) {
-        return (this.gameState == gameState);
-    }
+        public boolean isState(GameState gameState) {
+            return (this.gameState == gameState);
+        }
 
-    public GameState getGameState() {
-        return gameState;
+        public GameState getGameState() {
+            return gameState;
     }
 
     public void setGameState(GameState gameState) {

@@ -23,7 +23,7 @@ public abstract class Spell {
     private BukkitTask bukkitTask;
     private boolean activate = false;
 
-    public Spell(Player player) {
+    protected Spell(Player player) {
         this.player = player;
     }
 

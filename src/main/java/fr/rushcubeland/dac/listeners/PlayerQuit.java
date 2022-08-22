@@ -7,6 +7,7 @@ import fr.rushcubeland.commons.rank.RankUnit;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.TitleManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,16 +33,16 @@ public class PlayerQuit implements Listener {
         RcbAPI.getInstance().deleteScoreboard(player);
 
         if (DAC.getInstance().isState(GameState.STARTING) || DAC.getInstance().isState(GameState.WAITING)) {
-            event.setQuitMessage("§e[§bDé §6à §bCoudre§e] " + rank.getPrefix() + player.getDisplayName() + " §ca quitté la partie ! " + "§7<" + DAC.getInstance().getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
+            event.setQuitMessage(DAC.DAC_PREFIX + " " + rank.getPrefix() + player.getDisplayName() + ChatColor.RED + " a quitté la partie ! " + ChatColor.GRAY + "<" + DAC.getInstance().getPlayersGameList().size() + ChatColor.YELLOW + "/" + ChatColor.GOLD + DAC.getInstance().getMaxPlayer() + ChatColor.GRAY + ">");
         }
         if (DAC.getInstance().getPlayersGameList().contains(player)) {
             DAC.getInstance().getPlayersGameList().remove(player);
             DAC.getInstance().getPlayersServerList().remove(player);
 
             if (DAC.getInstance().isState(GameState.INPROGRESS)) {
-                event.setQuitMessage("§e" + player.getName() + " §cest mort en se déconnectant !");
+                event.setQuitMessage(ChatColor.YELLOW + player.getName() + ChatColor.RED + " est mort en se déconnectant !");
                 for(Player pls : Bukkit.getOnlinePlayers()) {
-                    TitleManager.sendActionBar(pls, "§6Il ne reste plus que " + DAC.getInstance().getPlayersGameList().size() + " §6joueurs");
+                    TitleManager.sendActionBar(pls, ChatColor.GRAY + "Il ne reste plus que " + ChatColor.RED + DAC.getInstance().getPlayersGameList().size() + ChatColor.GOLD + " joueurs");
                 }
             }
             if(DAC.getInstance().getPlayersGameList().size() == 1) {

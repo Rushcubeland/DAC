@@ -4,6 +4,7 @@ import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.dac.spells.SpellUnit;
 import fr.rushcubeland.dac.tasks.Afk;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -56,10 +57,10 @@ public class PlayerTurn {
     }
 
     public void makeAnnouncement(){
-        this.player.sendMessage("§eC'est votre tour !");
-        this.player.sendTitle("§eC'est votre tour !", "§6Bonne chance", 10, 70, 20);
+        this.player.sendMessage(ChatColor.YELLOW + "C'est votre tour !");
+        this.player.sendTitle(ChatColor.YELLOW + "C'est votre tour !", ChatColor.GOLD + "Bonne chance", 10, 70, 20);
         for(Player pls : DAC.getInstance().getPlayersGameList()){
-            pls.sendMessage("§6C'est au tour de §c" + this.player.getDisplayName());
+            pls.sendMessage(ChatColor.GOLD + "C'est au tour de " + ChatColor.RED + this.player.getDisplayName());
             pls.playSound(pls.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
         }
 
@@ -102,9 +103,9 @@ public class PlayerTurn {
             getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 99999, 2));
             setNextspell(null);
         }
-        Afk afk = new Afk(this.player);
+        Afk afkTask = new Afk(this.player);
         afk.runTaskTimer(DAC.getInstance(), 0L, 20L);
-        this.afk = afk;
+        this.afk = afkTask;
     }
 
     public void teleportPlayer(){

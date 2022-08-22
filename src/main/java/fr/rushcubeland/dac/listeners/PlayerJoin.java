@@ -8,6 +8,7 @@ import fr.rushcubeland.commons.Account;
 import fr.rushcubeland.commons.rank.RankUnit;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.ItemBuilder;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -32,19 +33,7 @@ public class PlayerJoin implements Listener {
     public void onJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
 
-        player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().clear();
-        player.setLevel(0);
-        player.setExp(0.0F);
-        player.setHealth(20.0D);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20D);
-        player.setFoodLevel(20);
-        player.getInventory().clear();
-        player.getEnderChest().clear();
-
-        for (PotionEffect effect : player.getActivePotionEffects()) {
-            player.removePotionEffect(effect.getType());
-        }
+        initPlayerOnMap(player);
 
         Account account = RcbAPI.getInstance().getAccount(player);
         RankUnit rank = account.getRank();
@@ -52,11 +41,11 @@ public class PlayerJoin implements Listener {
         if (!DAC.getInstance().isState(GameState.WAITING) && !DAC.getInstance().isState(GameState.STARTING)) {
             player.setGameMode(GameMode.SPECTATOR);
             player.teleport(Locations.POOL.getLocation());
-            player.sendMessage("§cLa partie à déja commencée !");
+            player.sendMessage(ChatColor.RED + "La partie à déja commencée !");
             event.setJoinMessage(null);
-            DAC.getInstance().setScorboardIP(player);
+            DAC.getInstance().setScoreboard(player, GameState.INPROGRESS);
             giveJoinItems(player);
-            player.sendTitle("§cLa Partie à", "§fdéja commencé",10, 70, 20);
+            player.sendTitle(ChatColor.RED + "La Partie à", ChatColor.WHITE + "déja commencé",10, 70, 20);
             for(Player pls : DAC.getInstance().getPlayersGameList()){
                 pls.hidePlayer(DAC.getInstance(), player);
             }
@@ -70,14 +59,14 @@ public class PlayerJoin implements Listener {
             RcbAPI.getInstance().getTablist().setTabListPlayer(player);
             DAC.getInstance().getPlayersGameList().add(player);
             initFlyPlayer(player, rank);
-            event.setJoinMessage("§e[§bDé §6à §bCoudre§e] " + rank.getPrefix() + player.getDisplayName() + " §6a rejoin la partie ! " + "§7<" + DAC.getInstance().getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
+            event.setJoinMessage(ChatColor.YELLOW + DAC.DAC_PREFIX + " " + rank.getPrefix() + player.getDisplayName() + ChatColor.GOLD + " a rejoin la partie ! " + ChatColor.GRAY + "<" + DAC.getInstance().getPlayersGameList().size() + ChatColor.YELLOW + "/" + ChatColor.GOLD + DAC.getInstance().getMaxPlayer() + ChatColor.GRAY + ">");
             for(Player pls : DAC.getInstance().getPlayersGameList()){
                 for (Player pls2 : DAC.getInstance().getPlayersGameList()){
                     pls.showPlayer(DAC.getInstance(), pls2);
                 }
             }
             if(DAC.getInstance().isState(GameState.WAITING)){
-                DAC.getInstance().setScorboardW(player);
+                DAC.getInstance().setScoreboard(player, GameState.WAITING);
                 if(DAC.getInstance().getPlayersGameList().size() > 1){
                     DAC.getInstance().setGameState((GameState.STARTING));
                     AutoStart start = new AutoStart();
@@ -86,7 +75,7 @@ public class PlayerJoin implements Listener {
             }
             else
             {
-                DAC.getInstance().setScorboardS(player);
+                DAC.getInstance().setScoreboard(player, GameState.STARTING);
             }
         }
 
@@ -96,7 +85,7 @@ public class PlayerJoin implements Listener {
     }
 
     private void giveJoinItems(Player player){
-        ItemStack bed = new ItemBuilder(Material.RED_BED).setName("§cRetour au Hub").removeFlags().toItemStack();
+        ItemStack bed = new ItemBuilder(Material.RED_BED).setName(ChatColor.RED + "Retour au Hub").removeFlags().toItemStack();
         player.getInventory().setItem(8, bed);
     }
 
@@ -104,6 +93,22 @@ public class PlayerJoin implements Listener {
         if(rank.getPower() <= 40){
             player.setAllowFlight(true);
             player.setFlying(true);
+        }
+    }
+
+    private void initPlayerOnMap(Player player){
+        player.setGameMode(GameMode.ADVENTURE);
+        player.getInventory().clear();
+        player.setLevel(0);
+        player.setExp(0.0F);
+        player.setHealth(20.0D);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20D);
+        player.setFoodLevel(20);
+        player.getInventory().clear();
+        player.getEnderChest().clear();
+
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
         }
     }
 

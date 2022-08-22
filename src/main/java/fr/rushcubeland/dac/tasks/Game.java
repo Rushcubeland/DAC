@@ -9,6 +9,7 @@ import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.ItemBuilder;
 import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,17 +30,18 @@ import java.util.Map;
 public class Game extends BukkitRunnable {
 
     private int timer = 2;
+    private final String SEPARATOR = ChatColor.YELLOW + "-------------------------";
 
     @Override
     public void run() {
 
         for (Map.Entry<Player, ScoreboardSign> sign : RcbAPI.getInstance().boards.entrySet()) {
             Player player = sign.getKey();
-            sign.getValue().setLine(4, "§6Tour: §e" + DAC.getInstance().getPlayerTurn().getPlayerName());
+            sign.getValue().setLine(4, ChatColor.GOLD + "Tour: " + ChatColor.YELLOW + DAC.getInstance().getPlayerTurn().getPlayerName());
             if(DAC.getInstance().getPlayersPoints().containsKey(player)){
-                sign.getValue().setLine(6, "§cPoints: §6" + DAC.getInstance().getPlayersPoints().get(player));
+                sign.getValue().setLine(6, ChatColor.RED + "Points: " + ChatColor.GOLD + DAC.getInstance().getPlayersPoints().get(player));
             }
-            sign.getValue().setLine(8, "§6Joueurs restant: §c" + DAC.getInstance().getPlayersGameList().size());
+            sign.getValue().setLine(8, ChatColor.GOLD + "Joueurs restant: " + ChatColor.RED + DAC.getInstance().getPlayersGameList().size());
         }
 
         if(timer == 1){
@@ -58,22 +60,22 @@ public class Game extends BukkitRunnable {
                     Account account = (Account) result;
                     account.setCoins(account.getCoins() + 100);
                     RcbAPI.getInstance().sendAccountToRedis(account);
-                    Bukkit.broadcastMessage(account.getRank().getPrefix() + winner.getDisplayName() + " §aa gagné la partie !");
+                    Bukkit.broadcastMessage(account.getRank().getPrefix() + winner.getDisplayName() + ChatColor.GREEN + " a gagné la partie !");
                 });
                 RcbAPI.getInstance().getAccountStatsDAC(winner, result -> {
                     AStatsDAC aStatsDAC = (AStatsDAC) result;
                     aStatsDAC.setWins(aStatsDAC.getWins() + 1);
                     RcbAPI.getInstance().sendAStatsDACToRedis(aStatsDAC);
                 });
-                winner.sendTitle("§6Félicitations !", "§fVous avez gagné", 10, 70, 20);
+                winner.sendTitle(ChatColor.GOLD + "Félicitations !", ChatColor.WHITE + "Vous avez gagné", 10, 70, 20);
                 winner.sendMessage(" ");
-                winner.sendMessage("§e-------------------------");
-                winner.sendMessage("§6Récompenses:");
-                winner.sendMessage("§c ");
-                winner.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(winner));
-                winner.sendMessage("§eVictoire: §c100 Coins");
-                winner.sendMessage("§eParticipation: §c10 Coins");
-                winner.sendMessage("§e-------------------------");
+                winner.sendMessage(SEPARATOR);
+                winner.sendMessage(ChatColor.GOLD + "Récompenses:");
+                winner.sendMessage(" ");
+                winner.sendMessage(ChatColor.YELLOW + "Points: " + ChatColor.GOLD + DAC.getInstance().getPlayersPoints().get(winner));
+                winner.sendMessage(ChatColor.YELLOW + "Victoire: " + ChatColor.RED + "100 Coins");
+                winner.sendMessage(ChatColor.YELLOW + "Participation: " + ChatColor.RED + "10 Coins");
+                winner.sendMessage(SEPARATOR);
             }
             for(Player pls : DAC.getInstance().getPlayersServerList()){
                 for (PotionEffect effect : pls.getActivePotionEffects()) {
@@ -83,12 +85,12 @@ public class Game extends BukkitRunnable {
                 RcbAPI.getInstance().getTablist().setTabListPlayer(pls);
                 if(DAC.getInstance().getPlayersPoints().containsKey(pls) && !pls.equals(winner)){
                     pls.sendMessage(" ");
-                    pls.sendMessage("§e-------------------------");
-                    pls.sendMessage("§6Récompenses:");
-                    pls.sendMessage("§c ");
-                    pls.sendMessage("§ePoints: §6" + DAC.getInstance().getPlayersPoints().get(pls));
-                    pls.sendMessage("§eParticipation: §c10 Coins");
-                    pls.sendMessage("§e-------------------------");
+                    pls.sendMessage(SEPARATOR);
+                    pls.sendMessage(ChatColor.GOLD + "Récompenses:");
+                    pls.sendMessage(" ");
+                    pls.sendMessage(ChatColor.YELLOW + "Points: " + ChatColor.GOLD + DAC.getInstance().getPlayersPoints().get(pls));
+                    pls.sendMessage(ChatColor.YELLOW + "Participation: " + ChatColor.RED + "10 Coins");
+                    pls.sendMessage(SEPARATOR);
                     if (winner != null) {
                         pls.showPlayer(DAC.getInstance(), winner);
                     }
@@ -107,11 +109,11 @@ public class Game extends BukkitRunnable {
     }
 
     public static void giveItems(Player player){
-        ItemStack bed = new ItemBuilder(Material.RED_BED).setName("§cRetour au Hub").removeFlags().toItemStack();
+        ItemStack bed = new ItemBuilder(Material.RED_BED).setName(ChatColor.RED + "Retour au Hub").removeFlags().toItemStack();
         player.getInventory().setItem(8, bed);
         player.updateInventory();
 
-        ItemStack star = new ItemBuilder(Material.NETHER_STAR).setName("§6Rejouer").removeFlags().toItemStack();
+        ItemStack star = new ItemBuilder(Material.NETHER_STAR).setName(ChatColor.GOLD + "Rejouer").removeFlags().toItemStack();
         player.getInventory().setItem(4, star);
         player.updateInventory();
     }

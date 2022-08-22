@@ -104,7 +104,7 @@ public class PlayerIntereact implements Listener {
                     DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.TRISMEGISTE.getPrice());
                     return;
                 }
-                player.sendMessage("§cVous n'avez pas assez de points pour utiliser ce sort !");
+                player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de points pour utiliser ce sort !");
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, SoundCategory.AMBIENT, 1F, 1F);
             }
         }

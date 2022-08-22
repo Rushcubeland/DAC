@@ -8,10 +8,7 @@ import fr.rushcubeland.dac.game.Locations;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import fr.rushcubeland.rcbcore.bukkit.tools.ScoreboardSign;
 import net.minecraft.server.v1_15_R1.MinecraftServer;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,22 +29,22 @@ public class AutoStart extends BukkitRunnable {
 
     public void run() {
         for (Map.Entry<Player, ScoreboardSign> sign : RcbAPI.getInstance().boards.entrySet()) {
-            sign.getValue().setLine(6, "§6Lancement dans: §e" + this.timer);
-            sign.getValue().setLine(8, "§7<" + DAC.getInstance().getPlayersGameList().size() + "§e/§6" + DAC.getInstance().getMaxPlayer() + "§7>");
+            sign.getValue().setLine(6, ChatColor.GOLD + "Lancement dans: " + ChatColor.YELLOW + this.timer);
+            sign.getValue().setLine(8, ChatColor.GRAY + "<" + DAC.getInstance().getPlayersGameList().size() + ChatColor.YELLOW + "/" + ChatColor.GOLD + DAC.getInstance().getMaxPlayer() + ChatColor.GRAY + ">");
         }
 
         for (Player pls : DAC.getInstance().getPlayersGameList()) {
             pls.setLevel(this.timer);
         }
         if (this.timer == 10 || this.timer == 15) {
-            Bukkit.broadcastMessage("§6La partie commence dans " + this.timer + "§cs");
+            Bukkit.broadcastMessage(ChatColor.GOLD + "La partie commence dans " + ChatColor.RED + this.timer + "s");
             for (Player pls : Bukkit.getOnlinePlayers()) {
                 pls.playSound(pls.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             }
         }
         if (this.timer == 5 || this.timer == 4 || this.timer == 3 || this.timer == 2 || this.timer == 1) {
             for (Player pls : Bukkit.getOnlinePlayers()) {
-                pls.sendTitle("§cLancement de la partie", "§6dans §6" + this.timer + "§cs", 20, 70, 20);
+                pls.sendTitle(ChatColor.RED + "Lancement de la partie", ChatColor.WHITE + "dans " + ChatColor.RED + this.timer + "s", 20, 70, 20);
                 pls.playSound(pls.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
             }
         }
@@ -58,7 +55,7 @@ public class AutoStart extends BukkitRunnable {
             int configminpls = 2;
             int plsc = DAC.getInstance().getPlayersGameList().size();
             int minpls = configminpls - plsc;
-            Bukkit.broadcastMessage("§cIl manque §6" + minpls + " §cjoueurs pour commencer la partie");
+            Bukkit.broadcastMessage(ChatColor.RED + "Il manque " + ChatColor.GOLD + minpls + ChatColor.RED + " joueurs pour commencer la partie");
         }
 
         if (this.timer == 0) {
@@ -70,15 +67,15 @@ public class AutoStart extends BukkitRunnable {
 
     private void timerFinished(){
         cancel();
-        Bukkit.broadcastMessage("§6La partie commence !");
-        MinecraftServer s = (((CraftServer)Bukkit.getServer()).getHandle().getServer());
+        Bukkit.broadcastMessage(ChatColor.GOLD + "La partie commence !");
+        MinecraftServer s = ((CraftServer)Bukkit.getServer()).getHandle().getServer();
         s.setMotd("INPROGRESS");
         DAC.getInstance().setGameState(GameState.INPROGRESS);
         for (Player pls : DAC.getInstance().getPlayersServerList()) {
             pls.teleport(Locations.POOL.getLocation());
             pls.setGameMode(GameMode.ADVENTURE);
             pls.getInventory().clear();
-            DAC.getInstance().setScorboardIP(pls);
+            DAC.getInstance().setScoreboard(pls, GameState.INPROGRESS);
         }
         for(Player pls : DAC.getInstance().getPlayersGameList()){
             pls.setFlying(false);

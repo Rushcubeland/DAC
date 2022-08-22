@@ -5,6 +5,7 @@ import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.dac.game.GameState;
 import fr.rushcubeland.dac.spells.*;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +36,7 @@ public class PlayerFall implements Listener {
                         }
                         else if(spell instanceof TrismegisteSpell && spell.isActivated()){
                             for (Player pls : DAC.getInstance().getPlayersGameList()){
-                                pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange grâce au §c" + SpellUnit.TRISMEGISTE.getName());
+                                pls.sendMessage(ChatColor.WHITE + player.getDisplayName() + ChatColor.GOLD + " a réussi son saut de l'ange grâce au " + ChatColor.RED +  SpellUnit.TRISMEGISTE.getName());
                             }
                             player.setGameMode(GameMode.SPECTATOR);
                             spell.stop();

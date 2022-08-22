@@ -32,7 +32,7 @@ public class PlayerMove implements Listener {
 
         if ((DAC.getInstance().isState(GameState.WAITING) || DAC.getInstance().isState(GameState.STARTING)) &&
                 l.getBlockY() < 15) {
-            player.sendTitle("§cPourquoi veux", "§7tu t'enfuirs ?", 10, 70, 20);
+            player.sendTitle(ChatColor.RED + "Pourquoi veux", ChatColor.GRAY + "tu t'enfuirs ?", 10, 70, 20);
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1F, 1F);
             player.teleport(Locations.LOBBY.getLocation());
         }
@@ -48,13 +48,13 @@ public class PlayerMove implements Listener {
                 int pointsToGive = (100 * getMultiplierPoints(block));
                 DAC.getInstance().getPlayersPoints().put(player, currentPoints+pointsToGive);
                 for (Player pls : DAC.getInstance().getPlayersGameList()){
-                    pls.sendMessage("§f" + player.getDisplayName() + " §6a réussi son saut de l'ange pour §c" + pointsToGive + " §6points !");
+                    pls.sendMessage(ChatColor.WHITE + player.getDisplayName() + ChatColor.GOLD + " a réussi son saut de l'ange pour " + ChatColor.RED + pointsToGive + ChatColor.GOLD + " points !");
                 }
                 player.setGameMode(GameMode.SPECTATOR);
                 if(poolIsFull()){
                     DAC.getInstance().setGameState(GameState.FINISH);
                     DAC.getInstance().getPlayersGameList().removeIf(pls -> pls != DAC.getInstance().getPlayerTurn().getPlayer());
-                    Bukkit.broadcastMessage("§6La piscine est remplie !");
+                    Bukkit.broadcastMessage(ChatColor.GOLD + "La piscine est remplie !");
                     return;
                 }
                 if(DAC.getInstance().getPlayersSpell().containsKey(player)){

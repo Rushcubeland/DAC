@@ -26,6 +26,7 @@ public class EmprisonnementSpell extends Spell {
 
     @Override
     public void run() {
+        throw new UnsupportedOperationException("Not supported for this spell");
     }
 
     @Override
