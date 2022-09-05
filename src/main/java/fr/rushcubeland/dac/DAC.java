@@ -100,7 +100,7 @@ public class DAC extends JavaPlugin {
         String mapText = ChatColor.GOLD + "Map: " + ChatColor.RED + map.getName();
         String playersRemain = ChatColor.GOLD + "Joueurs restant: " + ChatColor.RED + getPlayersGameList().size();
         String currentSlots = ChatColor.GRAY + "<" + getPlayersGameList().size() + ChatColor.YELLOW + "/" + ChatColor.GOLD + DAC.getInstance().getMaxPlayer() + ChatColor.GRAY + ">";
-        List<String> lines = null;
+        List<String> lines;
         ScoreboardSign sc;
         if(RcbAPI.getInstance().boards.containsKey(player)){
             sc = RcbAPI.getInstance().boards.get(player);
@@ -141,6 +141,7 @@ public class DAC extends JavaPlugin {
                     playersRemain,
                     " ",
                     ipText);
+            default -> throw new IllegalStateException("Unexpected value: " + currentState);
         }
         fillScoreboard(sc, lines);
     }

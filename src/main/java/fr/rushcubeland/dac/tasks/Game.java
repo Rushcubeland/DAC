@@ -29,8 +29,9 @@ import java.util.Map;
 
 public class Game extends BukkitRunnable {
 
+    private static final String SEPARATOR = ChatColor.YELLOW + "-------------------------";
+
     private int timer = 2;
-    private final String SEPARATOR = ChatColor.YELLOW + "-------------------------";
 
     @Override
     public void run() {

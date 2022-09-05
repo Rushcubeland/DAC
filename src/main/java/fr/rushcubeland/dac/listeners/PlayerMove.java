@@ -89,7 +89,7 @@ public class PlayerMove implements Listener {
     public boolean poolIsFull(){
         for(int x=-163; x<=-155; x++){
             for(int z=-643; z<=-635; z++){
-                Location loc = new Location(Bukkit.getWorld("DAC"), x, 1, z);
+                Location loc = new Location(Bukkit.getWorld(MapUnit.DAC.getPath()), x, 1, z);
                 Block b = loc.getBlock();
                 if(b.getType().equals(Material.WATER)){
                     return false;
@@ -101,31 +101,15 @@ public class PlayerMove implements Listener {
 
     public int getMultiplierPoints(Location loc){
         int nb = 1;
-        int x = loc.getBlock().getX();
-        int z = loc.getBlock().getZ();
-        loc.setZ(z+1);
-        for(Material m : DAC.getInstance().getPlayersBlock().values()){
-            if(loc.getBlock().getType().equals(m)){
-                nb += 1;
-            }
-        }
-        loc.setZ(z-2);
-        for(Material m : DAC.getInstance().getPlayersBlock().values()){
-            if(loc.getBlock().getType().equals(m)){
-                nb += 1;
-            }
-        }
-        loc.setX(x+1);
-        loc.setZ(z);
-        for(Material m : DAC.getInstance().getPlayersBlock().values()){
-            if(loc.getBlock().getType().equals(m)){
-                nb +=1;
-            }
-        }
-        loc.setX(x-2);
-        for(Material m : DAC.getInstance().getPlayersBlock().values()){
-            if(loc.getBlock().getType().equals(m)){
-                nb +=1;
+        for(int x = loc.getBlockX() + 1; x >= loc.getBlockX() - 1; x--){
+            for(int z = loc.getBlockZ() + 1; z >= loc.getBlockZ() - 1; z--){
+                Block b = loc.getWorld().getBlockAt(x, loc.getBlockY(), z);
+                if(b.equals(loc.getBlock())){
+                    continue;
+                }
+                if(DAC.getInstance().getBlocksLocation().containsKey(b)){
+                    nb++;
+                }
             }
         }
         return nb;
