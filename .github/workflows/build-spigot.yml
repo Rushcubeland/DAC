@@ -1,0 +1,37 @@
+name: Build Spigot with latest BuildTools
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      # Get BuildTools from https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+      - name: "Getting BuildTools"
+        run: "curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -o ./BuildTools.jar"
+
+      - name: "Setting up Java Development Kit"
+        uses: "actions/setup-java@v3"
+        with:
+          distribution: "zulu"
+          java-version: "14"
+          architecture: x64
+
+      # Build Spigot by BuildTools
+      - name: "Building Spigot"
+        # !! Change 'latest' to the version what you wanted. !!
+        # Also, Java version need changing if you're trying building versions below 1.17.X!
+        run: "java -jar BuildTools.jar --rev 1.15.2"
+
+      # Uploading the build jar files.
+      - name: "Uploading Build"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "Spigot"
+          path: "./spigot*.jar"
