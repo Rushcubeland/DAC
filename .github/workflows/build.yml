@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{matrix.java-version}}
-          distribution: 'openjdk'
+          distribution: 'zulu'
           cache: 'gradle'
           architecture: x64
       - name: Grant permissions for gradlew
