@@ -45,23 +45,23 @@ public class LevitationSpell extends Spell {
         setBukkitTask(Bukkit.getScheduler().runTaskTimer(DAC.getInstance(), () -> {
 
             Location location = getPlayer().getLocation();
-            location.setY(location.getBlockY()-1);
+            location.setY(location.getBlockY()-1D);
             getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
 
             for(int i = 0; i < 8; i++){
-                location.setX(location.getBlockX()+1);
+                location.setX(location.getBlockX()+1D);
                 getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
-                location.setX(location.getBlockX()-2);
+                location.setX(location.getBlockX()-2D);
                 getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
-                location.setZ(location.getBlockZ()+1);
+                location.setZ(location.getBlockZ()+1D);
                 getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
-                location.setZ(location.getBlockZ()-2);
+                location.setZ(location.getBlockZ()-2D);
                 getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
-                location.setZ(location.getBlockZ()-2);
+                location.setZ(location.getBlockZ()-2D);
             }
 
             getPlayer().getWorld().spawnParticle(Particle.CLOUD, location, 1);
-            location.setX(location.getBlockY()-1);
+            location.setX(location.getBlockY()-1D);
 
             if(timer == 0){
                 stop();
