@@ -44,5 +44,3 @@ jobs:
         with:
           name: artifact
           path: build/libs
-      - name: Execute Tests
-        run: ./gradlew test --info
