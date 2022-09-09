@@ -11,7 +11,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly fileTree(dir: 'libs', include: ['RcbCore*.jar'])
+    compileOnly 'org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT'
 }
 
 test {
