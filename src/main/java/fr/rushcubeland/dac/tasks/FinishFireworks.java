@@ -25,7 +25,7 @@ public class FinishFireworks extends BukkitRunnable {
 
     public void run() {
 
-        if(DAC.getInstance().getPlayersGameList().size() == 0){
+        if(DAC.getInstance().getPlayersGameList().isEmpty()){
             end();
             return;
         }

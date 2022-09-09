@@ -36,13 +36,13 @@ public class DAC extends JavaPlugin {
     private GameState gameState;
 
     private PlayerTurn playerTurn;
-    private final ArrayList<Player> playersGameList = new ArrayList<>();
+    private final List<Player> playersGameList = new ArrayList<>();
 
-    private final ArrayList<Player> playersServerList = new ArrayList<>();
+    private final List<Player> playersServerList = new ArrayList<>();
 
-    private final HashMap<Block, Location> blocksLocation = new HashMap<>();
+    private final Map<Block, Location> blocksLocation = new HashMap<>();
 
-    private final HashMap<Player, Integer> playersPoints = new HashMap<>();
+    private final Map<Player, Integer> playersPoints = new HashMap<>();
 
     private final HashMap<Player, Material> playersBlock = new HashMap<>();
 
@@ -205,11 +205,11 @@ public class DAC extends JavaPlugin {
             return maxPlayer;
         }
 
-        public ArrayList<Player> getPlayersGameList() {
+        public List<Player> getPlayersGameList() {
             return playersGameList;
         }
 
-        public ArrayList<Player> getPlayersServerList() {
+        public List<Player> getPlayersServerList() {
             return playersServerList;
         }
 
@@ -229,15 +229,15 @@ public class DAC extends JavaPlugin {
         return instance;
     }
 
-    public HashMap<Player, Integer> getPlayersPoints() {
+    public Map<Player, Integer> getPlayersPoints() {
         return playersPoints;
     }
 
-    public HashMap<Block, Location> getBlocksLocation() {
+    public Map<Block, Location> getBlocksLocation() {
         return blocksLocation;
     }
 
-    public HashMap<Player, Material> getPlayersBlock() {
+    public Map<Player, Material> getPlayersBlock() {
         return playersBlock;
     }
 }
