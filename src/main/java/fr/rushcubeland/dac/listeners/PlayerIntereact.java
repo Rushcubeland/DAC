@@ -69,40 +69,14 @@ public class PlayerIntereact implements Listener {
                 if(event.getItem() == null) {
                     return;
                 }
-                if(event.getItem().getType().equals(SpellUnit.DESTRUCTION.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.DESTRUCTION.getPrice()){
-                    Constructor<? extends Spell> constructor = SpellUnit.DESTRUCTION.getClazz().getConstructor(Player.class);
-                    Spell spell = constructor.newInstance(player);
-                    spell.use();
-                    DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.DESTRUCTION.getPrice());
-                    return;
-                }
-                if(event.getItem().getType().equals(SpellUnit.LEVITATION.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.LEVITATION.getPrice()){
-                    Constructor<? extends Spell> constructor = SpellUnit.LEVITATION.getClazz().getConstructor(Player.class);
-                    Spell spell = constructor.newInstance(player);
-                    spell.use();
-                    DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.LEVITATION.getPrice());
-                    return;
-                }
-                if(event.getItem().getType().equals(SpellUnit.EMPRISONNEMENT.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.EMPRISONNEMENT.getPrice()){
-                    Constructor<? extends Spell> constructor = SpellUnit.EMPRISONNEMENT.getClazz().getConstructor(Player.class);
-                    Spell spell = constructor.newInstance(player);
-                    spell.use();
-                    DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.EMPRISONNEMENT.getPrice());
-                    return;
-                }
-                if(event.getItem().getType().equals(SpellUnit.DISTORSION.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.DISTORSION.getPrice()){
-                    Constructor<? extends Spell> constructor = SpellUnit.DISTORSION.getClazz().getConstructor(Player.class);
-                    Spell spell = constructor.newInstance(player);
-                    spell.use();
-                    DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.DISTORSION.getPrice());
-                    return;
-                }
-                if(event.getItem().getType().equals(SpellUnit.TRISMEGISTE.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= SpellUnit.TRISMEGISTE.getPrice()){
-                    Constructor<? extends Spell> constructor = SpellUnit.TRISMEGISTE.getClazz().getConstructor(Player.class);
-                    Spell spell = constructor.newInstance(player);
-                    spell.use();
-                    DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player)-SpellUnit.TRISMEGISTE.getPrice());
-                    return;
+                for(SpellUnit spells : SpellUnit.values()){
+                    if(event.getItem().getType().equals(spells.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= spells.getPrice()) {
+                        Constructor<? extends Spell> constructor = spells.getClazz().getConstructor(Player.class);
+                        Spell spell = constructor.newInstance(player);
+                        spell.use();
+                        DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player) - spell.getPrice());
+                        return;
+                    }
                 }
                 player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de points pour utiliser ce sort !");
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, SoundCategory.AMBIENT, 1F, 1F);

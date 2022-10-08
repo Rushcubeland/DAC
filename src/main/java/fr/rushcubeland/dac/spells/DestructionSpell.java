@@ -4,6 +4,7 @@ import fr.rushcubeland.dac.DAC;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BlockIterator;
 
 /**
@@ -14,7 +15,7 @@ import org.bukkit.util.BlockIterator;
  * @author LANNUZEL Dylan
  */
 
-public class DestructionSpell extends Spell {
+public class DestructionSpell extends Spell implements SpellRunnable {
 
     private int tid;
 
@@ -58,6 +59,21 @@ public class DestructionSpell extends Spell {
                 }
             }
         }, 0L, 20L);
+    }
+
+    @Override
+    public void stop(int tid) {
+        Bukkit.getScheduler().cancelTask(tid);
+    }
+
+    @Override
+    public void stop(BukkitTask task) {
+        task.cancel();
+    }
+
+    public void stop(){
+        super.stop();
+        stop(this.tid);
     }
 
     public void end(){

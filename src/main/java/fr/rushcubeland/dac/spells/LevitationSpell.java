@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
@@ -14,9 +15,10 @@ import org.bukkit.potion.PotionEffectType;
  * @author LANNUZEL Dylan
  */
 
-public class LevitationSpell extends Spell {
+public class LevitationSpell extends Spell implements SpellRunnable {
 
     private int timer = 4;
+    private BukkitTask task;
 
     public LevitationSpell(Player player) {
         super(player);
@@ -42,7 +44,7 @@ public class LevitationSpell extends Spell {
     @Override
     public void run() {
 
-        setBukkitTask(Bukkit.getScheduler().runTaskTimer(DAC.getInstance(), () -> {
+        this.task = Bukkit.getScheduler().runTaskTimer(DAC.getInstance(), () -> {
 
             Location location = getPlayer().getLocation();
             location.setY(location.getBlockY()-1D);
@@ -69,6 +71,21 @@ public class LevitationSpell extends Spell {
 
             timer--;
 
-        }, 0L, 20L));
+        }, 0L, 20L);
+    }
+
+    @Override
+    public void stop(int tid) {
+        Bukkit.getScheduler().cancelTask(tid);
+    }
+
+    @Override
+    public void stop(BukkitTask task){
+        task.cancel();
+    }
+
+    public void stop(){
+        super.stop();
+        stop(this.task);
     }
 }
