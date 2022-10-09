@@ -90,7 +90,7 @@ public class PlayerJoin implements Listener {
     }
 
     private void initFlyPlayer(Player player, RankUnit rank){
-        if(rank.getPower() <= 40){
+        if(rank.getPower() <= RankUnit.FIRST_LEVEL_SPECIAL_RANK){
             player.setAllowFlight(true);
             player.setFlying(true);
         }

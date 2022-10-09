@@ -47,7 +47,7 @@ public class PlayerIntereact implements Listener {
             }
             buySort(event, player);
         }
-        if(event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK) &&
+        else if(event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK) &&
                 player.getInventory().getItemInMainHand().getType().equals(SpellUnit.DESTRUCTION.getMaterial()) &&
                 DAC.getInstance().getPlayerTurn().getPlayer().equals(player) && DAC.getInstance().getPlayersSpell().containsKey(player) &&
                 DAC.getInstance().getPlayersSpell().get(player) instanceof DestructionSpell){
@@ -70,16 +70,20 @@ public class PlayerIntereact implements Listener {
                     return;
                 }
                 for(SpellUnit spells : SpellUnit.values()){
-                    if(event.getItem().getType().equals(spells.getMaterial()) && DAC.getInstance().getPlayersPoints().get(player) >= spells.getPrice()) {
-                        Constructor<? extends Spell> constructor = spells.getClazz().getConstructor(Player.class);
-                        Spell spell = constructor.newInstance(player);
-                        spell.use();
-                        DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player) - spell.getPrice());
-                        return;
+                    if(event.getItem().getType().equals(spells.getMaterial())){
+                        if(DAC.getInstance().getPlayersPoints().get(player) >= spells.getPrice()) {
+                            Constructor<? extends Spell> constructor = spells.getClazz().getConstructor(Player.class);
+                            Spell spell = constructor.newInstance(player);
+                            spell.use();
+                            DAC.getInstance().getPlayersPoints().replace(player, DAC.getInstance().getPlayersPoints().get(player) - spell.getPrice());
+                            return;
+                        }
+                        else {
+                            player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de points pour utiliser ce sort !");
+                            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, SoundCategory.AMBIENT, 1F, 1F);
+                        }
                     }
                 }
-                player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de points pour utiliser ce sort !");
-                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, SoundCategory.AMBIENT, 1F, 1F);
             }
         }
     }

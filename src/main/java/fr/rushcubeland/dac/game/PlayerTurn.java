@@ -95,17 +95,16 @@ public class PlayerTurn {
             }
         }
         setPlayerTurn(DAC.getInstance().getPlayersGameList().get(position));
-        makeAnnouncement();
         teleportPlayer();
+        makeAnnouncement();
         setNextPositionRequired(1);
         SpellUnit.giveItems(this.player);
         if(this.nextspell == SpellUnit.DISTORSION){
             getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 99999, 2));
             setNextspell(null);
         }
-        Afk afkTask = new Afk(this.player);
+        this.afk = new Afk(this.player);
         afk.runTaskTimer(DAC.getInstance(), 0L, 20L);
-        this.afk = afkTask;
     }
 
     public void teleportPlayer(){

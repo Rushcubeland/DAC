@@ -34,6 +34,9 @@ public abstract class Spell {
         if(!(this instanceof DestructionSpell)){
             activate();
         }
+        if(this instanceof SpellRunnable){
+            ((SpellRunnable) this).run();
+        }
         DAC.getInstance().getPlayersSpell().put(player, this);
         RcbAPI.getInstance().getAccountStatsDAC(player, result -> {
             AStatsDAC aStatsDAC = (AStatsDAC) result;

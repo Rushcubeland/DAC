@@ -14,6 +14,8 @@ import org.bukkit.Location;
 
 public enum Locations {
 
+    // NEED CHANGES BECAUSE NOT GENERAL FOR ALL MAPS
+
     LOBBY(new Location(Bukkit.getWorld(MapUnit.WAITING_LOBBY.getPath()), 82D, 55D, -74D)),
     POOL(new Location(Bukkit.getWorld(MapUnit.DAC.getPath()), -161D, 59D, -636.5D)),
     DIVING_PLATFORM(new Location(Bukkit.getWorld(MapUnit.DAC.getPath()), -162.4D, 55D, -638.5D));

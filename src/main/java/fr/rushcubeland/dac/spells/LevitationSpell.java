@@ -86,6 +86,8 @@ public class LevitationSpell extends Spell implements SpellRunnable {
 
     public void stop(){
         super.stop();
-        stop(this.task);
+        if(this.task != null){
+            stop(this.task);
+        }
     }
 }
