@@ -1,13 +1,12 @@
 package fr.rushcubeland.dac.spells;
 
-import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.commons.AStatsDAC;
+import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * This class file is a part of DAC project claimed by Rushcubeland project.
@@ -20,7 +19,6 @@ import org.bukkit.scheduler.BukkitTask;
 public abstract class Spell {
 
     private final Player player;
-    private BukkitTask bukkitTask;
     private boolean activate = false;
 
     protected Spell(Player player) {
@@ -32,11 +30,14 @@ public abstract class Spell {
     }
 
     public void use(){
-        if(this instanceof LevitationSpell || this instanceof EmprisonnementSpell || this instanceof DistorsionSpell || this instanceof TrismegisteSpell){
+        // Tweak of the destructionSpell
+        if(!(this instanceof DestructionSpell)){
             activate();
         }
+        if(this instanceof SpellRunnable){
+            ((SpellRunnable) this).run();
+        }
         DAC.getInstance().getPlayersSpell().put(player, this);
-        run();
         RcbAPI.getInstance().getAccountStatsDAC(player, result -> {
             AStatsDAC aStatsDAC = (AStatsDAC) result;
             aStatsDAC.setNbSortsUsed(aStatsDAC.getNbSortsUsed()+1);
@@ -51,24 +52,11 @@ public abstract class Spell {
     public void stop(){
         this.activate = false;
         DAC.getInstance().getPlayersSpell().remove(player);
-        cancel();
     }
-
-    public void stop(int tid){
-        Bukkit.getScheduler().cancelTask(tid);
-    }
-
-    public abstract void run();
 
     public abstract String getName();
 
     public abstract int getPrice();
-
-    private void cancel(){
-        if(getBukkitTask() != null){
-            getBukkitTask().cancel();
-        }
-    }
 
     public void broadcast(){
         Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
@@ -78,13 +66,5 @@ public abstract class Spell {
 
     public Player getPlayer() {
         return player;
-    }
-
-    public BukkitTask getBukkitTask() {
-        return bukkitTask;
-    }
-
-    public void setBukkitTask(BukkitTask bukkitTask) {
-        this.bukkitTask = bukkitTask;
     }
 }

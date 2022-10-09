@@ -3,6 +3,7 @@ package fr.rushcubeland.dac.listeners;
 import fr.rushcubeland.commons.AStatsDAC;
 import fr.rushcubeland.dac.DAC;
 import fr.rushcubeland.dac.game.GameState;
+import fr.rushcubeland.dac.game.Locations;
 import fr.rushcubeland.dac.spells.*;
 import fr.rushcubeland.rcbcore.bukkit.RcbAPI;
 import org.bukkit.ChatColor;
@@ -28,13 +29,10 @@ public class PlayerFall implements Listener {
             if(event.getEntity() instanceof Player){
                 event.setCancelled(true);
                 Player player = (Player) event.getEntity();
-                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && DAC.getInstance().getPlayerTurn().getPlayer().equals(player)){
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && DAC.getInstance().getPlayerTurn().getPlayer().equals(player) && player.getLocation().getY() < Locations.DIVING_PLATFORM.getLocation().getY()-3){
                     if(DAC.getInstance().getPlayersSpell().containsKey(player)){
                         Spell spell = DAC.getInstance().getPlayersSpell().get(player);
-                        if(spell instanceof DestructionSpell){
-                            ((DestructionSpell) spell).end();
-                        }
-                        else if(spell instanceof TrismegisteSpell && spell.isActivated()){
+                        if(spell instanceof TrismegisteSpell && spell.isActivated()){
                             for (Player pls : DAC.getInstance().getPlayersGameList()){
                                 pls.sendMessage(ChatColor.WHITE + player.getDisplayName() + ChatColor.GOLD + " a réussi son saut de l'ange grâce au " + ChatColor.RED +  SpellUnit.TRISMEGISTE.getName());
                             }

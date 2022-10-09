@@ -4,6 +4,7 @@ import fr.rushcubeland.dac.DAC;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BlockIterator;
 
 /**
@@ -14,7 +15,7 @@ import org.bukkit.util.BlockIterator;
  * @author LANNUZEL Dylan
  */
 
-public class DestructionSpell extends Spell {
+public class DestructionSpell extends Spell implements SpellRunnable {
 
     private int tid;
 
@@ -39,7 +40,7 @@ public class DestructionSpell extends Spell {
             if(getPlayer().getInventory().getItemInMainHand().getType().equals(SpellUnit.DESTRUCTION.getMaterial())){
                 Location location = getPlayer().getEyeLocation();
                 BlockIterator blocks = new BlockIterator(location, 0D, 80);
-                while(blocks.hasNext()){
+                while(blocks.hasNext() && getPlayer().equals(DAC.getInstance().getPlayerTurn().getPlayer())){
                     Block block = blocks.next();
                     if(block.getType().equals(Material.AIR)){
                         getPlayer().getWorld().spawnParticle(Particle.FLAME, block.getLocation(), 1);
@@ -48,11 +49,8 @@ public class DestructionSpell extends Spell {
                         getPlayer().getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, block.getLocation(), 1);
                         DAC.getInstance().getBlocksLocation().remove(block);
                         block.setType(Material.WATER);
-                        DestructionSpell spell = (DestructionSpell) DAC.getInstance().getPlayersSpell().get(getPlayer());
-                        spell.end();
-                        Bukkit.broadcastMessage(ChatColor.WHITE + getPlayer().getDisplayName() + " " + ChatColor.GOLD + "a utilisé son sort de " + ChatColor.RED + getName()
-                                + ChatColor.GOLD + " pour " + ChatColor.YELLOW + getPrice() + ChatColor.GOLD + " points");
-                        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
+                        stop();
+                        broadcast();
                         break;
                     }
                 }
@@ -60,8 +58,19 @@ public class DestructionSpell extends Spell {
         }, 0L, 20L);
     }
 
-    public void end(){
-        stop(tid);
+    @Override
+    public void stop(int tid) {
+        Bukkit.getScheduler().cancelTask(tid);
+    }
+
+    @Override
+    public void stop(BukkitTask task) {
+        task.cancel();
+    }
+
+    public void stop(){
+        super.stop();
+        stop(this.tid);
     }
 
 }

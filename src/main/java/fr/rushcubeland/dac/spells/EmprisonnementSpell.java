@@ -21,12 +21,8 @@ public class EmprisonnementSpell extends Spell {
     public void use() {
         super.use();
         DAC.getInstance().getPlayerTurn().setNextPositionRequired(2);
+        broadcast();
         stop();
-    }
-
-    @Override
-    public void run() {
-        throw new UnsupportedOperationException("Not supported for this spell");
     }
 
     @Override

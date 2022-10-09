@@ -67,7 +67,6 @@ public class DAC extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        WorldManager.replaceWorld(map.getPath(), true);
     }
 
     private void initListeners(){
@@ -88,9 +87,9 @@ public class DAC extends JavaPlugin {
     }
 
     private void fillScoreboard(ScoreboardSign sc, List<String> lines){
-        if(sc != null){
+        if(sc != null && lines != null){
             for(int i = 1; i <= lines.size(); i++){
-                sc.setLine(i, lines.get(i));
+                sc.setLine(i, lines.get(i-1));
             }
         }
     }
@@ -100,7 +99,7 @@ public class DAC extends JavaPlugin {
         String mapText = ChatColor.GOLD + "Map: " + ChatColor.RED + map.getName();
         String playersRemain = ChatColor.GOLD + "Joueurs restant: " + ChatColor.RED + getPlayersGameList().size();
         String currentSlots = ChatColor.GRAY + "<" + getPlayersGameList().size() + ChatColor.YELLOW + "/" + ChatColor.GOLD + DAC.getInstance().getMaxPlayer() + ChatColor.GRAY + ">";
-        List<String> lines;
+        List<String> lines = null;
         ScoreboardSign sc;
         if(RcbAPI.getInstance().boards.containsKey(player)){
             sc = RcbAPI.getInstance().boards.get(player);
@@ -108,40 +107,40 @@ public class DAC extends JavaPlugin {
         else
         {
             sc = new ScoreboardSign(player, ChatColor.AQUA + "Dé " + ChatColor.GOLD + "à " + ChatColor.AQUA + "Coudre");
+            sc.create();
             RcbAPI.getInstance().boards.put(player, sc);
         }
         switch (currentState) {
             case WAITING ->
-                    lines = Arrays.asList(" ", ChatColor.YELLOW + "Boosters actifs: " + ChatColor.RED + 0 + ChatColor.RED + "x " + ChatColor.GOLD + "+100%",
-                            " ",
+                    lines = Arrays.asList("§1 ", ChatColor.YELLOW + "Boosters actifs: " + ChatColor.RED + 0 + ChatColor.RED + "x " + ChatColor.GOLD + "+100%",
+                            "§c ",
                             mapText,
-                            " ",
+                            "§4 ",
                             ChatColor.RED + "En attente de joueurs...",
-                            " ",
+                            "§6 ",
                             currentSlots,
-                            " ",
+                            "§2 ",
                             ipText);
             case STARTING ->
-                    lines = Arrays.asList(" ", ChatColor.YELLOW + "Boosters actifs: " + ChatColor.RED + 0 + ChatColor.RED + "x " + ChatColor.GOLD + "+100%",
-                            " ",
+                    lines = Arrays.asList("§c ", ChatColor.YELLOW + "Boosters actifs: " + ChatColor.RED + 0 + ChatColor.RED + "x " + ChatColor.GOLD + "+100%",
+                            "§6 ",
                             mapText,
-                            " ",
+                            "§b ",
                             ChatColor.GOLD + "Lancement dans: " + ChatColor.YELLOW,
-                            " ",
+                            "§2 ",
                             currentSlots,
-                            " ",
+                            "§5 ",
                             ipText);
-            case INPROGRESS -> lines = Arrays.asList(" ",
+            case INPROGRESS -> lines = Arrays.asList("§6 ",
                     mapText,
-                    " ",
+                    "§b ",
                     ChatColor.GOLD + "Tour: " + ChatColor.YELLOW,
-                    " ",
+                    "§4 ",
                     ChatColor.RED + "Points: " + ChatColor.GOLD,
-                    " ",
+                    "§2 ",
                     playersRemain,
-                    " ",
+                    "§a ",
                     ipText);
-            default -> throw new IllegalStateException("Unexpected value: " + currentState);
         }
         fillScoreboard(sc, lines);
     }
@@ -158,7 +157,7 @@ public class DAC extends JavaPlugin {
             player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0L, 0L);
             DAC.getInstance().getPlayersGameList().remove(player);
             for (Player pls : DAC.getInstance().getPlayersGameList()){
-                pls.sendMessage(ChatColor.YELLOW + player.getDisplayName() +ChatColor.RED + "a hurté un bloc !");
+                pls.sendMessage(ChatColor.YELLOW + player.getDisplayName() + ChatColor.RED + " a hurté un bloc !");
             }
             player.teleport(Locations.POOL.getLocation());
             if(DAC.getInstance().getPlayersGameList().size() == 1) {
@@ -180,6 +179,7 @@ public class DAC extends JavaPlugin {
         }
         final int randInt = new SecureRandom().nextInt(mapUnits.size());
         setMap(mapUnits.get(randInt));
+        WorldManager.replaceWorld(map.getPath(), true);
         Bukkit.getServer().createWorld(new WorldCreator(getMap().getPath()));
         Locations.POOL.getLocation().setWorld(Bukkit.getWorld(getMap().getPath()));
         Locations.DIVING_PLATFORM.getLocation().setWorld(Bukkit.getWorld(getMap().getPath()));
@@ -194,31 +194,29 @@ public class DAC extends JavaPlugin {
     }
 
     public void setMap(MapUnit map) {
-            this.map = map;
-        }
+        this.map = map;
+    }
 
-        public HashMap<Player, Spell> getPlayersSpell() {
-            return playersSpell;
-        }
+    public HashMap<Player, Spell> getPlayersSpell() {
+        return playersSpell;
+    }
 
-        public int getMaxPlayer() {
-            return maxPlayer;
-        }
+    public int getMaxPlayer() {
+        return maxPlayer;
+    }
+    public List<Player> getPlayersGameList() {
+        return playersGameList;
+    }
 
-        public List<Player> getPlayersGameList() {
-            return playersGameList;
-        }
+    public List<Player> getPlayersServerList() {
+        return playersServerList;
+    }
 
-        public List<Player> getPlayersServerList() {
-            return playersServerList;
-        }
-
-        public boolean isState(GameState gameState) {
-            return (this.gameState == gameState);
-        }
-
-        public GameState getGameState() {
-            return gameState;
+    public boolean isState(GameState gameState) {
+        return (this.gameState == gameState);
+    }
+    public GameState getGameState() {
+        return gameState;
     }
 
     public void setGameState(GameState gameState) {
