@@ -29,7 +29,7 @@ public class PlayerFall implements Listener {
             if(event.getEntity() instanceof Player){
                 event.setCancelled(true);
                 Player player = (Player) event.getEntity();
-                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && DAC.getInstance().getPlayerTurn().getPlayer().equals(player) && player.getLocation().getY() < Locations.DIVING_PLATFORM.getLocation().getY()-3){
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && DAC.getInstance().getPlayerTurn().getPlayer().equals(player) && player.getLocation().getY() < Locations.getDivingPlatformLocation().getY()-3){
                     if(DAC.getInstance().getPlayersSpell().containsKey(player)){
                         Spell spell = DAC.getInstance().getPlayersSpell().get(player);
                         if(spell instanceof TrismegisteSpell && spell.isActivated()){

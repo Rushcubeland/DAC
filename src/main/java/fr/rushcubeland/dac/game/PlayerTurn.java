@@ -52,7 +52,7 @@ public class PlayerTurn {
         position = new SecureRandom().nextInt(DAC.getInstance().getPlayersGameList().size());
         this.player= DAC.getInstance().getPlayersGameList().get(position);
         this.player.setGameMode(GameMode.ADVENTURE);
-        this.player.teleport(Locations.DIVING_PLATFORM.getLocation());
+        this.player.teleport(Locations.getDivingPlatformLocation());
         SpellUnit.giveItems(this.player);
     }
 
@@ -109,7 +109,7 @@ public class PlayerTurn {
 
     public void teleportPlayer(){
         this.player.setGameMode(GameMode.ADVENTURE);
-        this.player.teleport(Locations.DIVING_PLATFORM.getLocation());
+        this.player.teleport(Locations.getDivingPlatformLocation());
     }
 
     public String getPlayerName(){

@@ -40,7 +40,7 @@ public class PlayerJoin implements Listener {
 
         if (!DAC.getInstance().isState(GameState.WAITING) && !DAC.getInstance().isState(GameState.STARTING)) {
             player.setGameMode(GameMode.SPECTATOR);
-            player.teleport(Locations.POOL.getLocation());
+            player.teleport(Locations.getPoolLocation());
             player.sendMessage(ChatColor.RED + "La partie à déja commencée !");
             event.setJoinMessage(null);
             DAC.getInstance().setScoreboard(player, GameState.INPROGRESS);

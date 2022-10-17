@@ -46,7 +46,7 @@ public class Afk extends BukkitRunnable {
             for (Player pls : DAC.getInstance().getPlayersGameList()){
                 pls.sendMessage(ChatColor.YELLOW + player.getDisplayName() + ChatColor.RED + " a été disqualifié pour avoir été innactif");
             }
-            player.teleport(Locations.POOL.getLocation());
+            player.teleport(Locations.getPoolLocation());
             if(DAC.getInstance().getPlayersGameList().size() == 1) {
                 DAC.getInstance().setGameState(GameState.FINISH);
                 return;

@@ -84,6 +84,7 @@ public class LevitationSpell extends Spell implements SpellRunnable {
         task.cancel();
     }
 
+    @Override
     public void stop(){
         super.stop();
         if(this.task != null){
