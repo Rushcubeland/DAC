@@ -48,7 +48,7 @@ public class PlayerMove implements Listener {
             }
             else if(DAC.getInstance().getPlayersSpell().containsKey(player) && DAC.getInstance().getPlayersSpell().get(player) instanceof LevitationSpell && DAC.getInstance().getPlayersSpell().get(player).isActivated()){
                 Block b = location.getBlock().getRelative(BlockFace.DOWN);
-                if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < Locations.DIVING_PLATFORM.getLocation().getY()-3 && !b.getType().equals(Material.AIR)){
+                if(!b.getType().equals(Material.WATER) && !b.isLiquid() && b.getY() < Locations.getDivingPlatformLocation().getY()-3 && !b.getType().equals(Material.AIR)){
                     LevitationSpell spell = (LevitationSpell) DAC.getInstance().getPlayersSpell().get(player);
                     spell.stop();
                     DAC.getInstance().deathMethod(player);

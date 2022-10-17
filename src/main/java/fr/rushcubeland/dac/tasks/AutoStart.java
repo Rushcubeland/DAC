@@ -72,7 +72,7 @@ public class AutoStart extends BukkitRunnable {
         s.setMotd("INPROGRESS");
         DAC.getInstance().setGameState(GameState.INPROGRESS);
         for (Player pls : DAC.getInstance().getPlayersServerList()) {
-            pls.teleport(Locations.POOL.getLocation());
+            pls.teleport(Locations.getPoolLocation());
             pls.setGameMode(GameMode.ADVENTURE);
             pls.getInventory().clear();
             DAC.getInstance().setScoreboard(pls, GameState.INPROGRESS);

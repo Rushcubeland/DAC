@@ -97,7 +97,7 @@ public class Game extends BukkitRunnable {
                     }
                 }
                 pls.setGameMode(GameMode.ADVENTURE);
-                pls.teleport(Locations.POOL.getLocation());
+                pls.teleport(Locations.getPoolLocation());
                 pls.getInventory().clear();
                 giveItems(pls);
                 pls.setAllowFlight(true);

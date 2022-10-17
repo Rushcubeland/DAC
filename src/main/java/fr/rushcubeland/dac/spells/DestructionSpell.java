@@ -68,6 +68,7 @@ public class DestructionSpell extends Spell implements SpellRunnable {
         task.cancel();
     }
 
+    @Override
     public void stop(){
         super.stop();
         stop(this.tid);

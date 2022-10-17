@@ -159,7 +159,7 @@ public class DAC extends JavaPlugin {
             for (Player pls : DAC.getInstance().getPlayersGameList()){
                 pls.sendMessage(ChatColor.YELLOW + player.getDisplayName() + ChatColor.RED + " a hurté un bloc !");
             }
-            player.teleport(Locations.POOL.getLocation());
+            player.teleport(Locations.getPoolLocation());
             if(DAC.getInstance().getPlayersGameList().size() == 1) {
                 DAC.getInstance().setGameState(GameState.FINISH);
                 return;
@@ -181,8 +181,8 @@ public class DAC extends JavaPlugin {
         setMap(mapUnits.get(randInt));
         WorldManager.replaceWorld(map.getPath(), true);
         Bukkit.getServer().createWorld(new WorldCreator(getMap().getPath()));
-        Locations.POOL.getLocation().setWorld(Bukkit.getWorld(getMap().getPath()));
-        Locations.DIVING_PLATFORM.getLocation().setWorld(Bukkit.getWorld(getMap().getPath()));
+        Locations.getPoolLocation().setWorld(Bukkit.getWorld(getMap().getPath()));
+        Locations.getDivingPlatformLocation().setWorld(Bukkit.getWorld(getMap().getPath()));
     }
 
     public PlayerTurn getPlayerTurn() {
